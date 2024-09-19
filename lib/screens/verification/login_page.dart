@@ -3,16 +3,13 @@ import 'package:ev_charge/screens/verification/change_password.dart';
 
 import 'package:flutter/material.dart';
 
-// Public class
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
-  // This should return a private state, which is valid.
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
-// Private state class
 class _LoginPageState extends State<LoginPage> {
   List<bool> isSelected = [true, false];
 
@@ -197,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
                       ),
-                    )
+                    ),
                   ],
                 )
               ],
