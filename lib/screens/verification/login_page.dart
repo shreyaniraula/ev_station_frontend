@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: const [
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Text("Log in"),
+                      child: Text("User"),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
