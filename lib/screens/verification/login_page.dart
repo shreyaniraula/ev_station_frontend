@@ -3,16 +3,13 @@ import 'package:ev_charge/screens/verification/change_password.dart';
 
 import 'package:flutter/material.dart';
 
-// Public class
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
-  // This should return a private state, which is valid.
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-// Private state class
 class _LoginPageState extends State<LoginPage> {
   List<bool> isSelected = [true, false];
 
@@ -22,27 +19,28 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [
-            Color.fromARGB(136, 242, 243, 242),
-            Color.fromARGB(255, 252, 253, 252)
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+            gradient: LinearGradient(colors: [
+              Color.fromARGB(136, 242, 243, 242),
+              Color.fromARGB(255, 252, 253, 252)
+            ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // App Name
                 const Text(
-                  'Watt to do',
+                  'EV Charging\nStation Locator',
                   style: TextStyle(
                     color: Color.fromARGB(255, 156, 240, 88),
-                    fontSize: 35,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                // Toogle Button
-
+                // Toogle Buttons
                 ToggleButtons(
                   borderColor: Colors.white,
                   fillColor: const Color.fromARGB(255, 17, 163, 90),
@@ -55,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                       for (int i = 0; i < isSelected.length; i++) {
                         isSelected[i] = i == index;
                       }
+                      print(isSelected);
                     });
                   },
                   isSelected: isSelected,
@@ -70,6 +69,8 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
+                
+                //Input Details: username and password
                 Container(
                   height: 380,
                   width: double.infinity,
@@ -102,10 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                           fillColor: Colors.white,
                         ),
                       ),
-
-                      // pass
-
                       const SizedBox(height: 20),
+                      
                       TextField(
                         obscureText: true,
                         style: const TextStyle(color: Colors.white),
@@ -128,6 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
+                      
+                      //Forgot Password
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
@@ -142,6 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 40),
+                      
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -192,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
                       ),
-                    )
+                    ),
                   ],
                 )
               ],
@@ -203,9 +205,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-void main() => runApp(
-      const MaterialApp(
-        home: LoginPage(),
-      ),
-    );
