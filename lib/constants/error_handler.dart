@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ev_charge/utils/showSnackbar.dart';
+import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
