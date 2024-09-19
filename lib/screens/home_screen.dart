@@ -12,6 +12,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final Widget widgetList=[
+     const BookingPage(),
+     const AccountPage(),
+  ];
   int index = 0;
 
   @override
@@ -46,11 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: index == 0
-          ? const MainPage()
-          : index == 1
-              ? const BookingPage()
-              : const AccountPage(),
+      body:   IndexedStack(
+                children: widgetList,
+                index:index,
+              )
     );
   }
 }
