@@ -66,6 +66,8 @@ class AuthService {
         },
       );
 
+      print(res.body);
+
       errorHandler(
         response: res,
         context: context,
