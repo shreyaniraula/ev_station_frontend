@@ -1,3 +1,4 @@
+import 'package:ev_charge/router.dart';
 import 'package:ev_charge/screens/verification/login_page.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(255, 248, 253, 253),
       ),
+      onGenerateRoute: (settings) => generateRoute(settings),
       debugShowCheckedModeBanner: false,
       home: const LoginPage(),
     );

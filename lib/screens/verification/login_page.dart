@@ -1,20 +1,37 @@
-import 'package:ev_charge/screens/home_screen.dart';
 import 'package:ev_charge/screens/verification/change_password.dart';
+import 'package:ev_charge/services/user/auth_service.dart';
+import 'package:ev_charge/widgets/custom_textfield.dart';
 
 import 'package:flutter/material.dart';
 
-// Public class
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
-  // This should return a private state, which is valid.
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-// Private state class
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   List<bool> isSelected = [true, false];
+
+  final AuthService _authService = AuthService();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+  }
+
+  void loginUser() {
+    _authService.loginUser(
+      context: context,
+      username: _usernameController.text,
+      password: _passwordController.text,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,27 +39,28 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [
-            Color.fromARGB(136, 242, 243, 242),
-            Color.fromARGB(255, 252, 253, 252)
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+            gradient: LinearGradient(colors: [
+              Color.fromARGB(136, 242, 243, 242),
+              Color.fromARGB(255, 252, 253, 252)
+            ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // App Name
                 const Text(
-                  'Watt to do',
+                  'EV Charging\nStation Locator',
                   style: TextStyle(
                     color: Color.fromARGB(255, 156, 240, 88),
-                    fontSize: 35,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 20),
 
-                // Toogle Button
-
+                // Toogle Buttons
                 ToggleButtons(
                   borderColor: Colors.white,
                   fillColor: const Color.fromARGB(255, 17, 163, 90),
@@ -70,6 +88,8 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
+
+                //Input Details: username and password
                 Container(
                   height: 380,
                   width: double.infinity,
@@ -81,53 +101,18 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.only(
                         top: 50, left: 8.0, right: 8.0, bottom: 8.0),
                     child: Column(children: [
-                      TextField(
-                        style: const TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          labelText: 'Username',
-                          labelStyle: const TextStyle(
-                            color: Color.fromARGB(255, 145, 145, 145),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: const BorderSide(color: Colors.white),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: const BorderSide(
-                              color: Color.fromRGBO(205, 221, 169, 0.651),
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
+                      CustomTextfield(
+                        controller: _usernameController,
+                        labelText: 'Username',
+                        obscureText: false,
                       ),
-
-                      // pass
-
-                      const SizedBox(height: 20),
-                      TextField(
+                      CustomTextfield(
+                        controller: _passwordController,
+                        labelText: 'Password',
                         obscureText: true,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          labelStyle: const TextStyle(
-                            color: Color.fromARGB(255, 145, 145, 145),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: const BorderSide(color: Colors.white),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: const BorderSide(
-                                color: Color.fromRGBO(205, 221, 169, 0.651)),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                        ),
                       ),
-                      const SizedBox(height: 20),
+
+                      //Forgot Password
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
@@ -142,16 +127,13 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 40),
+
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const HomeScreen();
-                              },
-                            ),
-                          );
+                          if (isSelected[0]) {
+                            // Authenticate user
+                            loginUser();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(
@@ -192,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
                       ),
-                    )
+                    ),
                   ],
                 )
               ],
@@ -203,9 +185,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-void main() => runApp(
-      const MaterialApp(
-        home: LoginPage(),
-      ),
-    );
