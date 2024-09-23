@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapPage extends StatefulWidget {
@@ -76,12 +76,17 @@ class _MapPageState extends State<MapPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.location_pin,
-                              color: Colors.green),
+                          icon: const Icon(
+                            Icons.location_pin,
+                            color: Colors.green,
+                          ),
                           onPressed: () {},
                         ),
                         IconButton(
-                          icon: const Icon(Icons.phone, color: Colors.green),
+                          icon: const Icon(
+                            Icons.phone,
+                            color: Colors.green,
+                          ),
                           onPressed: () {},
                         ),
                       ],
@@ -95,4 +100,4 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
-}*/
+}
