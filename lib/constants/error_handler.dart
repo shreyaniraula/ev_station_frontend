@@ -15,7 +15,6 @@ void errorHandler({
       onSuccess();
       break;
     default:
-      print(response.body);
       showSnackBar(context, jsonDecode(response.body)['message']);
   }
 }

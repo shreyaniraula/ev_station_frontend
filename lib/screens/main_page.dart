@@ -1,5 +1,5 @@
 // ignore: unused_import
-import 'package:ev_charge/pages/map_page.dart';
+import 'package:ev_charge/widgets/map_widget.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
