@@ -1,5 +1,5 @@
 // ignore: unused_import
-import 'package:ev_charge/widgets/map_widget.dart';
+import 'package:ev_charge/widgets/map_page.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return const MainPage();
+    return const MapPage();
     //use map page here
   }
 }
