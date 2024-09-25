@@ -18,9 +18,8 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      print('here*********************************');
-      getUserLocation();
+    getUserLocation().then((response) {
+      setState(() {});
     });
   }
 
@@ -114,21 +113,21 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> getUserLocation() async {
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
 
-    serviceEnabled = await _locationController.serviceEnabled();
+    _serviceEnabled = await _locationController.serviceEnabled();
 
-    if (serviceEnabled) {
-      serviceEnabled = await _locationController.requestService();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await _locationController.requestService();
     } else {
       return;
     }
 
-    permissionGranted = await _locationController.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await _locationController.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
+    _permissionGranted = await _locationController.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await _locationController.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
@@ -142,9 +141,6 @@ class _MapPageState extends State<MapPage> {
             currentLocation.latitude!,
             currentLocation.longitude!,
           );
-          print('******************************************');
-          print(currentLocation);
-          print('******************************************');
         });
       }
     });
