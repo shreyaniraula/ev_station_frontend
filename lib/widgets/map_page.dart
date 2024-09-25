@@ -18,9 +18,8 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () async {
-      print('here*********************************');
-      getUserLocation();
+    getUserLocation().then((response) {
+      setState(() {});
     });
   }
 
@@ -119,7 +118,7 @@ class _MapPageState extends State<MapPage> {
 
     serviceEnabled = await _locationController.serviceEnabled();
 
-    if (serviceEnabled) {
+    if (!serviceEnabled) {
       serviceEnabled = await _locationController.requestService();
     } else {
       return;
@@ -142,9 +141,6 @@ class _MapPageState extends State<MapPage> {
             currentLocation.latitude!,
             currentLocation.longitude!,
           );
-          print('******************************************');
-          print(currentLocation);
-          print('******************************************');
         });
       }
     });
