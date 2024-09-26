@@ -11,7 +11,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
-  // late GoogleMapController _mapController;
+  late GoogleMapController _mapController;
   final Location _locationController = Location();
   LatLng? _currentPosition;
 
@@ -25,17 +25,17 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           GoogleMap(
-            initialCameraPosition: CameraPosition(
+            initialCameraPosition: const CameraPosition(
               target: _initialPosition,
               zoom: 13.0,
             ),
-            // onMapCreated: (GoogleMapController controller) {
-            //   _mapController = controller;
-            // },
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+            },
           ),
           // SafeArea(
           //   child: Padding(
@@ -113,15 +113,13 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> getUserLocation() async {
+
     bool serviceEnabled;
     PermissionStatus permissionGranted;
 
     serviceEnabled = await _locationController.serviceEnabled();
-
     if (!serviceEnabled) {
       serviceEnabled = await _locationController.requestService();
-    } else {
-      return;
     }
 
     permissionGranted = await _locationController.hasPermission();
@@ -131,6 +129,7 @@ class _MapPageState extends State<MapPage> {
         return;
       }
     }
+
 
     _locationController.onLocationChanged
         .listen((LocationData currentLocation) {
@@ -143,6 +142,7 @@ class _MapPageState extends State<MapPage> {
           );
         });
       }
+
     });
   }
 }
