@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -11,7 +13,9 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
-  // ignore: unused_field
+  final Completer<GoogleMapController> _mapController =
+      Completer<GoogleMapController>();
+
   late GoogleMapController _mapController;
   final Location _locationController = Location();
   // ignore: unused_field
@@ -30,15 +34,24 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       body: Stack(
         children: [
-          GoogleMap(
-            initialCameraPosition: const CameraPosition(
-              target: _initialPosition,
-              zoom: 13.0,
-            ),
-            onMapCreated: (GoogleMapController controller) {
-              _mapController = controller;
-            },
-          ),
+          _currentPosition == null
+              ? const Center(
+                  child: Text('Loading...'),
+                )
+              : GoogleMap(
+                  onMapCreated: ((GoogleMapController controller) =>
+                      _mapController.complete(controller)),
+                  initialCameraPosition: const CameraPosition(
+                    target: _initialPosition,
+                    zoom: 13.0,
+                  ),
+                  markers: {
+                    Marker(
+                      markerId: const MarkerId('_currentLocation'),
+                      position: _currentPosition!,
+                    ),
+                  },
+                ),
           // SafeArea(
           //   child: Padding(
           //     padding: const EdgeInsets.all(8.0),
@@ -140,8 +153,22 @@ class _MapPageState extends State<MapPage> {
             currentLocation.latitude!,
             currentLocation.longitude!,
           );
+          _pointToUser(_currentPosition!);
         });
       }
     });
+  }
+
+  Future<void> _pointToUser(LatLng position) async {
+    final GoogleMapController controller = await _mapController.future;
+
+    CameraPosition newCameraPosition = CameraPosition(
+      target: position,
+      zoom: 13,
+    );
+
+    await controller.animateCamera(
+      CameraUpdate.newCameraPosition(newCameraPosition),
+    );
   }
 }
