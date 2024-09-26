@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Watt to do'),
+        title: const Text('EV Charging Station Locator'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
