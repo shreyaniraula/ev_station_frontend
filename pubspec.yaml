@@ -11,18 +11,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  image_picker: ^0.8.5+3 # Add this line
   google_maps_flutter: ^2.9.0
   cupertino_icons: ^1.0.8
   file_picker: ^8.1.2
   http: ^1.2.2
   location: ^5.0.0
+  connectivity_plus: ^2.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^4.0.0
 
 flutter:
-
   uses-material-design: true
+  assets:
+    - assets/images/Ev_image.png

@@ -11,8 +11,10 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
+  // ignore: unused_field
   late GoogleMapController _mapController;
   final Location _locationController = Location();
+  // ignore: unused_field
   LatLng? _currentPosition;
 
   @override
@@ -113,7 +115,6 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> getUserLocation() async {
-
     bool serviceEnabled;
     PermissionStatus permissionGranted;
 
@@ -130,7 +131,6 @@ class _MapPageState extends State<MapPage> {
       }
     }
 
-
     _locationController.onLocationChanged
         .listen((LocationData currentLocation) {
       if (currentLocation.latitude != null &&
@@ -142,7 +142,6 @@ class _MapPageState extends State<MapPage> {
           );
         });
       }
-
     });
   }
 }

@@ -1,5 +1,7 @@
 import 'package:ev_charge/router.dart';
+// ignore: unused_import
 import 'package:ev_charge/screens/main_page.dart';
+import 'package:ev_charge/screens/verification/login_page.dart';
 // import 'package:ev_charge/screens/verification/login_page.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
       debugShowCheckedModeBanner: false,
-      home: const MainPage(),
+      home: const LoginPage(),
       //const LoginPage(),
     );
   }
