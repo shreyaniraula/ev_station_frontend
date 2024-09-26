@@ -1,4 +1,5 @@
-import 'package:ev_charge/screens/verification/change_password.dart';
+import 'package:ev_charge/screens/home_screen.dart';
+import 'package:ev_charge/screens/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
 
@@ -132,7 +133,11 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           if (isSelected[0]) {
                             // Authenticate user
-                            loginUser();
+                            //loginUser();
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              HomeScreen.routeName,
+                              (route) => false,
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -165,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ChangePassword()));
+                                builder: (context) => const SignupUser()));
                       },
                       child: const Text(
                         "Sign Up",

@@ -15,7 +15,10 @@ class _MapPageState extends State<MapPage> {
   static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
+
+  late GoogleMapController _mapController;
   final Location _locationController = Location();
+  // ignore: unused_field
   LatLng? _currentPosition;
 
   @override

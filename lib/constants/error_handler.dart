@@ -15,6 +15,8 @@ void errorHandler({
       onSuccess();
       break;
     default:
+      // ignore: avoid_print
+      print(response.body);
       showSnackBar(context, jsonDecode(response.body)['message']);
   }
 }
