@@ -1,6 +1,7 @@
 import 'package:ev_charge/screens/account_page.dart';
 import 'package:ev_charge/screens/booking_page.dart';
-import 'package:ev_charge/screens/main_page.dart';
+import 'package:ev_charge/widgets/map_page.dart';
+import 'package:ev_charge/widgets/openstreetmap_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: index == 0
-          ? const MainPage()
+          ? const OpenstreetmapPage()
           : index == 1
               ? const BookingPage()
               : const AccountPage(),

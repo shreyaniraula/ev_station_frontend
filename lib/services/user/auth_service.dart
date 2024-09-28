@@ -1,11 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:ev_charge/constants/error_handler.dart';
 import 'package:ev_charge/models/user.model.dart';
 import 'package:ev_charge/screens/home_screen.dart';
-// ignore: unused_import
 import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class AuthService {
-  get uri => null;
-
   Future<void> registerUser({
     required BuildContext context,
     String? username,
