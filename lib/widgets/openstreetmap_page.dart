@@ -15,6 +15,7 @@ class OpenstreetmapPage extends StatefulWidget {
 }
 
 class _OpenstreetmapPageState extends State<OpenstreetmapPage> {
+  final MapController _mapController = MapController();
   Position? _currentPosition;
   List<Marker> _evMarkers = [];
   static const lat = 26.458376831959747;
@@ -36,6 +37,7 @@ class _OpenstreetmapPageState extends State<OpenstreetmapPage> {
       body: Stack(
         children: [
           FlutterMap(
+            mapController: _mapController,
             options: const MapOptions(
               initialCenter: initialPosition,
               initialZoom: 16.0,
@@ -106,10 +108,12 @@ class _OpenstreetmapPageState extends State<OpenstreetmapPage> {
     final double latitude = _currentPosition!.latitude;
     final double longitude = _currentPosition!.longitude;
 
-    final response = await http.get(Uri.parse(_evApiUrl),
-     headers: {
-    'User-Agent': 'EV station finder',
-  },);
+    final response = await http.get(
+      Uri.parse(_evApiUrl),
+      headers: {
+        'User-Agent': 'EV station finder',
+      },
+    );
 
     print(response.body);
 
