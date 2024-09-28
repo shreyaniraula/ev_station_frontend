@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'package:ev_charge/utils/pick_images.dart';
+import 'package:ev_charge/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ev_charge/screens/verification/signup_station.dart';
 
 class SignupUser extends StatefulWidget {
+  static const String routeName = '/signup-user-screen';
   const SignupUser({super.key});
 
   @override
@@ -14,54 +17,15 @@ class _SignupUserState extends State<SignupUser> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
 
   XFile? _image;
 
-  Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery);
+  void selectImage() async {
+    var img = await pickImage();
     setState(() {
-      _image = pickedImage;
+      _image = img;
     });
-  }
-
-  Widget _buildTextField(String label,
-      {bool obscureText = false,
-      IconData? icon,
-      TextEditingController? controller}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        style: const TextStyle(color: Colors.black),
-        decoration: InputDecoration(
-          prefixIcon: icon != null
-              ? Icon(icon, color: const Color.fromARGB(255, 66, 197, 131))
-              : null,
-          labelText: label,
-          labelStyle:
-              const TextStyle(color: Color.fromARGB(255, 145, 145, 145)),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: Colors.grey),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 17, 163, 90)),
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        ),
-      ),
-    );
   }
 
   @override
@@ -69,7 +33,7 @@ class _SignupUserState extends State<SignupUser> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Register"),
+          title: const Text("Sign Up User"),
           backgroundColor: const Color.fromARGB(255, 62, 182, 122),
         ),
         body: Padding(
@@ -118,22 +82,27 @@ class _SignupUserState extends State<SignupUser> {
                     ),
                     child: Column(
                       children: [
-                        _buildTextField('Username',
-                            icon: Icons.person,
-                            controller: _usernameController),
-                        _buildTextField('Password',
-                            obscureText: true,
-                            icon: Icons.lock,
-                            controller: _passwordController),
-                        _buildTextField('Confirm Password',
-                            obscureText: true,
-                            icon: Icons.lock,
-                            controller: _confirmPasswordController),
-                        _buildTextField('Phone Number',
-                            icon: Icons.phone, controller: _phoneController),
+                        CustomTextfield(
+                          labelText: 'Username',
+                          obscureText: false,
+                          icon: Icons.person,
+                          controller: _usernameController,
+                        ),
+                        CustomTextfield(
+                          labelText: 'Password',
+                          obscureText: true,
+                          icon: Icons.lock,
+                          controller: _passwordController,
+                        ),
+                        CustomTextfield(
+                          labelText: 'Phone Number',
+                          obscureText: false,
+                          icon: Icons.phone,
+                          controller: _phoneController,
+                        ),
                         const SizedBox(height: 20),
                         GestureDetector(
-                          onTap: _pickImage,
+                          onTap: selectImage,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: _image == null

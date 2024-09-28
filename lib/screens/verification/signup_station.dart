@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:ev_charge/screens/home_screen.dart';
+import 'package:ev_charge/utils/pick_images.dart';
+import 'package:ev_charge/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignupStation extends StatefulWidget {
+  static const String routeName = '/signup-station-screen';
   const SignupStation({super.key});
 
   @override
@@ -11,44 +17,19 @@ class SignupStation extends StatefulWidget {
 class _SignupStationState extends State<SignupStation> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _stationNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _slotsController = TextEditingController();
 
-  Widget _buildTextField(String label,
-      {bool obscureText = false,
-      IconData? icon,
-      TextEditingController? controller}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        style: const TextStyle(color: Colors.black),
-        decoration: InputDecoration(
-          prefixIcon: icon != null
-              ? Icon(icon, color: const Color.fromARGB(255, 66, 197, 131))
-              : null,
-          labelText: label,
-          labelStyle:
-              const TextStyle(color: Color.fromARGB(255, 145, 145, 145)),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: Colors.grey),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 17, 163, 90)),
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        ),
-      ),
-    );
+  XFile? _image;
+
+  void selectImage() async {
+    var img = await pickImage();
+    setState(() {
+      _image = img;
+    });
   }
 
   @override
@@ -56,7 +37,7 @@ class _SignupStationState extends State<SignupStation> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Register Station"),
+          title: const Text("Sign Up Station"),
           backgroundColor: const Color.fromARGB(255, 62, 182, 122),
         ),
         body: Padding(
@@ -104,21 +85,68 @@ class _SignupStationState extends State<SignupStation> {
                     ),
                     child: Column(
                       children: [
-                        _buildTextField('Station Name',
-                            icon: Icons.business,
-                            controller: _stationNameController),
-                        _buildTextField('Password',
-                            obscureText: true,
-                            icon: Icons.lock,
-                            controller: _passwordController),
-                        _buildTextField('Phone Number',
-                            icon: Icons.phone, controller: _phoneController),
-                        _buildTextField('Location',
-                            icon: Icons.location_on,
-                            controller: _locationController),
-                        _buildTextField('Number of Slots',
-                            icon: Icons.event_seat,
-                            controller: _slotsController),
+                        CustomTextfield(
+                          labelText: 'Station Name',
+                          obscureText: false,
+                          icon: Icons.business,
+                          controller: _stationNameController,
+                        ),
+                        CustomTextfield(
+                          labelText: 'Username',
+                          obscureText: false,
+                          icon: Icons.person,
+                          controller: _usernameController,
+                        ),
+                        CustomTextfield(
+                          labelText: 'Password',
+                          obscureText: true,
+                          icon: Icons.lock,
+                          controller: _passwordController,
+                        ),
+                        CustomTextfield(
+                          labelText: 'Phone Number',
+                          obscureText: false,
+                          icon: Icons.phone,
+                          controller: _phoneController,
+                        ),
+                        CustomTextfield(
+                          labelText: 'Location',
+                          obscureText: false,
+                          icon: Icons.location_on,
+                          controller: _locationController,
+                        ),
+                        CustomTextfield(
+                          labelText: 'Number of Slots',
+                          obscureText: false,
+                          icon: Icons.event_seat,
+                          controller: _slotsController,
+                        ),
+                        GestureDetector(
+                          onTap: selectImage,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: _image == null
+                                ? Container(
+                                    height: 150,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Icon(
+                                      Icons.add_a_photo,
+                                      color: Colors.grey,
+                                      size: 50,
+                                    ),
+                                  )
+                                : Image.file(
+                                    File(_image!.path),
+                                    height: 150,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
                         const SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () {

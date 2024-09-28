@@ -1,4 +1,5 @@
 import 'package:ev_charge/screens/home_screen.dart';
+import 'package:ev_charge/screens/verification/signup_station.dart';
 import 'package:ev_charge/screens/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
@@ -13,6 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   List<bool> isSelected = [true, false];
@@ -106,11 +108,13 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _usernameController,
                         labelText: 'Username',
                         obscureText: false,
+                        icon: Icons.person,
                       ),
                       CustomTextfield(
                         controller: _passwordController,
                         labelText: 'Password',
                         obscureText: true,
+                        icon: Icons.lock,
                       ),
 
                       //Forgot Password
@@ -131,13 +135,17 @@ class _LoginPageState extends State<LoginPage> {
 
                       ElevatedButton(
                         onPressed: () {
-                          if (isSelected[0]) {
-                            // Authenticate user
-                            //loginUser();
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              HomeScreen.routeName,
-                              (route) => false,
-                            );
+                          if (_formKey.currentState!.validate()) {
+                            if (isSelected[0]) {
+                              // Authenticate user
+                              loginUser();
+
+                              //Comment previous code and comment out following code for running without server
+                              // Navigator.of(context).pushNamedAndRemoveUntil(
+                              //   HomeScreen.routeName,
+                              //   (route) => false,
+                              // );
+                            }
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -167,17 +175,28 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        if (isSelected[0]) {
+                          // If user is selected on toggle button go to signup user
+                          Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignupUser()));
+                            SignupUser.routeName,
+                          );
+                        }
+                        else{
+                          // If station is selected on toggle button go to signup station
+                          Navigator.pushNamed(
+                            context,
+                            SignupStation.routeName,
+                          );
+                        }
                       },
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
-                            color: Color.fromARGB(249, 116, 221, 46),
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
+                          color: Color.fromARGB(249, 116, 221, 46),
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
