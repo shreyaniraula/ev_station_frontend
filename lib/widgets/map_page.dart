@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:ev_charge/constants/api_key.dart';
+import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:http/http.dart' as http;
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -12,13 +16,12 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
+  // static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
+  final Set<Marker> _markers = {};
 
-  late GoogleMapController _mapController;
   final Location _locationController = Location();
-  // ignore: unused_field
   LatLng? _currentPosition;
 
   @override
@@ -41,16 +44,13 @@ class _MapPageState extends State<MapPage> {
               : GoogleMap(
                   onMapCreated: ((GoogleMapController controller) =>
                       _mapController.complete(controller)),
-                  initialCameraPosition: const CameraPosition(
-                    target: _initialPosition,
+                  initialCameraPosition: CameraPosition(
+                    target: _currentPosition!,
                     zoom: 13.0,
                   ),
-                  markers: {
-                    Marker(
-                      markerId: const MarkerId('_currentLocation'),
-                      position: _currentPosition!,
-                    ),
-                  },
+                  markers: _markers,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
                 ),
           // SafeArea(
           //   child: Padding(
@@ -153,22 +153,65 @@ class _MapPageState extends State<MapPage> {
             currentLocation.latitude!,
             currentLocation.longitude!,
           );
-          _pointToUser(_currentPosition!);
+          // _pointToUser(_currentPosition!);
+          _getNearbyChargingStations(
+            _currentPosition!.latitude,
+            _currentPosition!.longitude,
+          );
+          _markers.add(
+            Marker(
+              markerId: const MarkerId('_currentLocation'),
+              position: _currentPosition!,
+            ),
+          );
         });
       }
     });
   }
 
-  Future<void> _pointToUser(LatLng position) async {
-    final GoogleMapController controller = await _mapController.future;
+  // Future<void> _pointToUser(LatLng position) async {
+  //   final GoogleMapController controller = await _mapController.future;
 
-    CameraPosition newCameraPosition = CameraPosition(
-      target: position,
-      zoom: 13,
-    );
+  //   CameraPosition newCameraPosition = CameraPosition(
+  //     target: position,
+  //     zoom: 13,
+  //   );
 
-    await controller.animateCamera(
-      CameraUpdate.newCameraPosition(newCameraPosition),
-    );
+  //   await controller.animateCamera(
+  //     CameraUpdate.newCameraPosition(newCameraPosition),
+  //   );
+  // }
+
+  Future<void> _getNearbyChargingStations(double lat, double lng) async {
+    String apiKey = kGoogleApiKey;
+    String url =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lng&radius=1500&type=ev_charging_station&key=$apiKey';
+
+    final response = await http.get(Uri.parse(url));
+    
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final results = data['results'];
+
+
+      setState(() async {
+        for (var result in results) {
+          _markers.add(
+            Marker(
+              markerId: MarkerId(result['place_id']),
+              position: LatLng(result['geometry']['location']['lat'],
+                  result['geometry']['location']['lng']),
+              infoWindow: InfoWindow(title: result['name']),
+              icon: await BitmapDescriptor.asset(
+                const ImageConfiguration(size: Size(48, 48)),
+                'assets/images/charging_station.png',
+              ),
+            ),
+          );
+        }
+      });
+    } else {
+      showSnackBar(context, 'Failed to load nearby restaurants');
+    }
   }
 }
