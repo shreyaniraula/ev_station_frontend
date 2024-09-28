@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 
 class User {
   final String id;
@@ -7,8 +8,7 @@ class User {
   final String username;
   final String password;
   final String phoneNumber;
-  final String email;
-  final File image;
+  final XFile image;
 
   User({
     required this.id,
@@ -16,7 +16,6 @@ class User {
     required this.fullName,
     required this.password,
     required this.phoneNumber,
-    required this.email,
     required this.image,
   });
 
@@ -27,7 +26,6 @@ class User {
       'username': username,
       'password': password,
       'phoneNumber': phoneNumber,
-      'email': email,
       'image': image,
     };
   }
@@ -39,7 +37,6 @@ class User {
       username: map['username'] ?? '',
       password: map['password'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
-      email: map['email'] ?? '',
       image: map['image'] ?? '',
     );
   }
