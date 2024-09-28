@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: index == 0
-          ? const OpenstreetmapPage()
+          ? const MapPage()
           : index == 1
               ? const BookingPage()
               : const AccountPage(),
