@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ev_charge/screens/home_screen.dart';
+import 'package:ev_charge/services/station/auth_service.dart';
 import 'package:ev_charge/utils/pick_images.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,8 @@ class _SignupStationState extends State<SignupStation> {
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _slotsController = TextEditingController();
 
+  final AuthService _authService = AuthService();
+
   XFile? _image;
 
   @override
@@ -41,6 +44,19 @@ class _SignupStationState extends State<SignupStation> {
     setState(() {
       _image = img;
     });
+  }
+
+  void registerStation() {
+    _authService.registerStation(
+      context: context,
+      stationName: _stationNameController.text,
+      username: _usernameController.text,
+      password: _passwordController.text,
+      phoneNumber: _phoneController.text,
+      location: _locationController.text,
+      noOfSlots: _slotsController.text,
+      image: _image!,
+    );
   }
 
   @override
@@ -161,13 +177,8 @@ class _SignupStationState extends State<SignupStation> {
                         const SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const HomeScreen(),
-                                ),
-                              );
+                            if (_formKey.currentState!.validate() && _image != null) {
+                              registerStation();
                             }
                           },
                           style: ElevatedButton.styleFrom(
