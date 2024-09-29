@@ -100,10 +100,10 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(16),
                     color: const Color.fromARGB(255, 240, 242, 246),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 50, left: 8.0, right: 8.0, bottom: 8.0),
-                    child: Column(children: [
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
                       CustomTextfield(
                         controller: _usernameController,
                         labelText: 'Username',
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         icon: Icons.lock,
                       ),
-
+                                        
                       //Forgot Password
                       Align(
                         alignment: Alignment.centerRight,
@@ -132,14 +132,15 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 40),
-
+                                        
                       ElevatedButton(
                         onPressed: () {
+                          print('Button pressed');
                           if (_formKey.currentState!.validate()) {
                             if (isSelected[0]) {
                               // Authenticate user
                               loginUser();
-
+                                        
                               //Comment previous code and comment out following code for running without server
                               // Navigator.of(context).pushNamedAndRemoveUntil(
                               //   HomeScreen.routeName,
@@ -181,8 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             SignupUser.routeName,
                           );
-                        }
-                        else{
+                        } else {
                           // If station is selected on toggle button go to signup station
                           Navigator.pushNamed(
                             context,

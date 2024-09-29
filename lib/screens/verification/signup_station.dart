@@ -25,6 +25,17 @@ class _SignupStationState extends State<SignupStation> {
 
   XFile? _image;
 
+  @override
+  void dispose() {
+    super.dispose();
+    _stationNameController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _phoneController.dispose();
+    _locationController.dispose();
+    _slotsController.dispose();
+  }
+
   void selectImage() async {
     var img = await pickImage();
     setState(() {

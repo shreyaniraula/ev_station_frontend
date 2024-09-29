@@ -8,6 +8,7 @@ import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AuthService {
   Future<void> registerUser({
@@ -16,8 +17,7 @@ class AuthService {
     required String fullName,
     required String password,
     String? phoneNumber,
-    String? email,
-    required File image,
+    required XFile image,
   }) async {
     try {
       User user = User(
@@ -26,7 +26,6 @@ class AuthService {
         fullName: fullName,
         password: password,
         phoneNumber: phoneNumber ?? '',
-        email: email ?? '',
         image: image,
       );
 
