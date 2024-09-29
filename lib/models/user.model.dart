@@ -8,7 +8,7 @@ class User {
   final String username;
   final String password;
   final String phoneNumber;
-  final XFile image;
+  final String image;
 
   User({
     required this.id,

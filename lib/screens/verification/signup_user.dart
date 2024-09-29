@@ -4,7 +4,6 @@ import 'package:ev_charge/utils/pick_images.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ev_charge/screens/verification/signup_station.dart';
 
 class SignupUser extends StatefulWidget {
   static const String routeName = '/signup-user-screen';
@@ -43,11 +42,13 @@ class _SignupUserState extends State<SignupUser> {
 
   void registerUser() {
     _authService.registerUser(
-        context: context,
-        username: _usernameController.text,
-        password: _passwordController.text,
-        fullName: _nameController.text,
-        image: _image!);
+      context: context,
+      username: _usernameController.text,
+      password: _passwordController.text,
+      fullName: _nameController.text,
+      image: _image!,
+      phoneNumber: _phoneController.text,
+    );
   }
 
   @override
@@ -66,8 +67,7 @@ class _SignupUserState extends State<SignupUser> {
               children: [
                 Center(
                   child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(20), // Rounded corners
+                    borderRadius: BorderRadius.circular(20), // Rounded corners
                     child: Image.asset(
                       'assets/images/ev_image.png',
                       height: 150,
@@ -158,9 +158,10 @@ class _SignupUserState extends State<SignupUser> {
                         const SizedBox(height: 30),
                         ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
+                            if (_formKey.currentState!.validate() &&
+                                _image != null) {
                               registerUser();
-                              Navigator.pop(context);
+                              // Navigator.pop(context);
                             }
                           },
                           style: ElevatedButton.styleFrom(

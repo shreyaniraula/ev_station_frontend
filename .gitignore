@@ -17,6 +17,7 @@ migrate_working_dir/
 .idea/
 /lib/uri.dart
 /lib/constants/api_key.dart
+/lib/constants/cloudinary_keys.dart
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.

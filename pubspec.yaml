@@ -19,6 +19,7 @@ dependencies:
   connectivity_plus: ^2.3.0
   flutter_map: ^7.0.2
   geolocator: ^13.0.1
+  cloudinary_public: ^0.23.1
 
 dev_dependencies:
   flutter_test:

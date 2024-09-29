@@ -6,14 +6,15 @@ import 'package:ev_charge/widgets/custom_textfield.dart';
 
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  static const String routeName = '/login-screen';
+  const LoginScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -102,8 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: Form(
                     key: _formKey,
-                    child: Column(
-                      children: [
+                    child: Column(children: [
                       CustomTextfield(
                         controller: _usernameController,
                         labelText: 'Username',
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         icon: Icons.lock,
                       ),
-                                        
+
                       //Forgot Password
                       Align(
                         alignment: Alignment.centerRight,
@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 40),
-                                        
+
                       ElevatedButton(
                         onPressed: () {
                           print('Button pressed');
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                             if (isSelected[0]) {
                               // Authenticate user
                               loginUser();
-                                        
+
                               //Comment previous code and comment out following code for running without server
                               // Navigator.of(context).pushNamedAndRemoveUntil(
                               //   HomeScreen.routeName,
