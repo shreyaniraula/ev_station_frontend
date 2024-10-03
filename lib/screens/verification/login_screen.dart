@@ -1,4 +1,3 @@
-import 'package:ev_charge/screens/home_screen.dart';
 import 'package:ev_charge/screens/verification/signup_station.dart';
 import 'package:ev_charge/screens/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';

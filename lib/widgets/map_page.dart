@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:ev_charge/constants/api_key.dart';
-import 'package:ev_charge/utils/show_snackbar.dart';
+import 'package:ev_charge/constants/ev_station_coordinates.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:http/http.dart' as http;
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -16,7 +13,6 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  // static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
   final Set<Marker> _markers = {};
@@ -39,7 +35,7 @@ class _MapPageState extends State<MapPage> {
         children: [
           _currentPosition == null
               ? const Center(
-                  child: Text('Loading...'),
+                  child: CircularProgressIndicator(),
                 )
               : GoogleMap(
                   onMapCreated: ((GoogleMapController controller) =>
@@ -83,11 +79,11 @@ class _MapPageState extends State<MapPage> {
             currentLocation.latitude!,
             currentLocation.longitude!,
           );
-          // _pointToUser(_currentPosition!);
-          _getNearbyChargingStations(
-            _currentPosition!.latitude,
-            _currentPosition!.longitude,
-          );
+
+
+          displayMarkers();
+
+
           _markers.add(
             Marker(
               markerId: const MarkerId('_currentLocation'),
@@ -99,51 +95,20 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  Future<void> _getNearbyChargingStations(double lat, double lng) async {
-    String apiKey = kGoogleApiKey;
-    String url =
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lng&radius=1500&type=ev_charging_station&key=$apiKey';
+  Future<void> displayMarkers() async {
 
-    final response = await http.get(Uri.parse(url));
-    print(
-        'The results are ***************************************************');
-    print(response.body);
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final results = data['results'];
-
-      setState(() {
-        displayStations(results);
-      });
-    } else {
-      showSnackBar(context, 'Failed to load nearby EV stations');
-    }
-  }
-
-  Future<void> displayStations(results) async {
-    for (var result in results) {
+    for (var data in evStationsCoordinates) {
       _markers.add(
         Marker(
-          markerId: MarkerId(result['place_id']),
-          position: LatLng(result['geometry']['location']['lat'],
-              result['geometry']['location']['lng']),
-          infoWindow: InfoWindow(title: result['name']),
-          icon: await BitmapDescriptor.asset(
-            const ImageConfiguration(size: Size(48, 48)),
-            'assets/images/charging_station.png',
-          ),
-        ),
+            markerId: const MarkerId('_destinationMarker'),
+            position: LatLng(data['latitude'], data['longitude']),
+            icon: await BitmapDescriptor.asset(
+              const ImageConfiguration(size: Size(20, 20)),
+              'assets/images/charging_station.png',
+            ),
+            infoWindow: InfoWindow(title: data['name'])),
       );
     }
+
   }
 }
-
-
-/*
-User enters the station details
-Admin verifies the station
-Admin enters the coordinates of the station and stores in database
-There is a marker field in the database which is initially null
-But once added the coordinates of the map are retrieved from database and markers are shown in the map
-*/
