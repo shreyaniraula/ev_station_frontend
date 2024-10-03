@@ -96,10 +96,8 @@ class AuthService {
         response: res,
         context: context,
         onSuccess: () {
-            showSnackBar(context,
-                "Station registered successfully. Login with the same credentials.");
             Navigator.of(context).pushNamedAndRemoveUntil(
-              LoginScreen.routeName,
+              HomeScreen.routeName,
               (route) => false,
             );
           });
