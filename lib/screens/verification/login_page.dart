@@ -1,20 +1,18 @@
-import 'package:ev_charge/screens/verification/signup_station.dart';
+import 'package:ev_charge/screens/home_screen.dart';
 import 'package:ev_charge/screens/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
 
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const String routeName = '/login-screen';
-  const LoginScreen({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   List<bool> isSelected = [true, false];
@@ -100,20 +98,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(16),
                     color: const Color.fromARGB(255, 240, 242, 246),
                   ),
-                  child: Form(
-                    key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 50, left: 8.0, right: 8.0, bottom: 8.0),
                     child: Column(children: [
                       CustomTextfield(
                         controller: _usernameController,
                         labelText: 'Username',
                         obscureText: false,
-                        icon: Icons.person,
                       ),
                       CustomTextfield(
                         controller: _passwordController,
                         labelText: 'Password',
                         obscureText: true,
-                        icon: Icons.lock,
                       ),
 
                       //Forgot Password
@@ -134,18 +131,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       ElevatedButton(
                         onPressed: () {
-                          print('Button pressed');
-                          if (_formKey.currentState!.validate()) {
-                            if (isSelected[0]) {
-                              // Authenticate user
-                              loginUser();
-
-                              //Comment previous code and comment out following code for running without server
-                              // Navigator.of(context).pushNamedAndRemoveUntil(
-                              //   HomeScreen.routeName,
-                              //   (route) => false,
-                              // );
-                            }
+                          if (isSelected[0]) {
+                            // Authenticate user
+                            //loginUser();
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              HomeScreen.routeName,
+                              (route) => false,
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -175,27 +167,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        if (isSelected[0]) {
-                          // If user is selected on toggle button go to signup user
-                          Navigator.pushNamed(
+                        Navigator.push(
                             context,
-                            SignupUser.routeName,
-                          );
-                        } else {
-                          // If station is selected on toggle button go to signup station
-                          Navigator.pushNamed(
-                            context,
-                            SignupStation.routeName,
-                          );
-                        }
+                            MaterialPageRoute(
+                                builder: (context) => const SignupUser()));
                       },
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
-                          color: Color.fromARGB(249, 116, 221, 46),
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            color: Color.fromARGB(249, 116, 221, 46),
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],

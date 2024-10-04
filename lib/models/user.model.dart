@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 class User {
   final String id;
@@ -6,7 +7,8 @@ class User {
   final String username;
   final String password;
   final String phoneNumber;
-  final String image;
+  final String email;
+  final File image;
 
   User({
     required this.id,
@@ -14,6 +16,7 @@ class User {
     required this.fullName,
     required this.password,
     required this.phoneNumber,
+    required this.email,
     required this.image,
   });
 
@@ -24,6 +27,7 @@ class User {
       'username': username,
       'password': password,
       'phoneNumber': phoneNumber,
+      'email': email,
       'image': image,
     };
   }
@@ -35,6 +39,7 @@ class User {
       username: map['username'] ?? '',
       password: map['password'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
+      email: map['email'] ?? '',
       image: map['image'] ?? '',
     );
   }

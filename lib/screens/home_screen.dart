@@ -1,6 +1,6 @@
 import 'package:ev_charge/screens/account_page.dart';
 import 'package:ev_charge/screens/booking_page.dart';
-import 'package:ev_charge/widgets/map_page.dart';
+import 'package:ev_charge/screens/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EV Charging Station Locator'),
+        title: const Text('Watt to do'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: index == 0
-          ? const MapPage()
+          ? const MainPage()
           : index == 1
               ? const BookingPage()
               : const AccountPage(),

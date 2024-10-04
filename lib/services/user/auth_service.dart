@@ -1,66 +1,54 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
-import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:ev_charge/constants/cloudinary_keys.dart';
+import 'dart:io';
 import 'package:ev_charge/constants/error_handler.dart';
 import 'package:ev_charge/models/user.model.dart';
 import 'package:ev_charge/screens/home_screen.dart';
-import 'package:ev_charge/screens/verification/login_screen.dart';
+// ignore: unused_import
 import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AuthService {
+  get uri => null;
+
   Future<void> registerUser({
     required BuildContext context,
-    required String username,
+    String? username,
     required String fullName,
     required String password,
-    required String phoneNumber,
-    required XFile image,
+    String? phoneNumber,
+    String? email,
+    required File image,
   }) async {
     try {
-      final cloudinary =
-          CloudinaryPublic(kCloudinaryCloudName, kCloudinaryUploadPreset);
-
-      CloudinaryResponse uploadedImage = await cloudinary.uploadFile(
-        CloudinaryFile.fromFile(
-          image.path,
-          resourceType: CloudinaryResourceType.Image,
-          folder: username,
-        ),
-      );
-
       User user = User(
         id: '',
-        username: username,
+        username: username ?? '',
         fullName: fullName,
         password: password,
-        phoneNumber: phoneNumber,
-        image: uploadedImage.secureUrl,
+        phoneNumber: phoneNumber ?? '',
+        email: email ?? '',
+        image: image,
       );
 
       http.Response res = await http.post(
         Uri.parse('$uri/api/v1/users/register'),
-        body: user.toJson(), // Ensure it's encoded properly
+        body: jsonEncode(user.toJson()), // Ensure it's encoded properly
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
 
       errorHandler(
-          response: res,
-          context: context,
-          onSuccess: () {
-            showSnackBar(context,
-                "User registered successfully. Login with the same credentials.");
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              LoginScreen.routeName,
-              (route) => false,
-            );
-          });
+        response: res,
+        context: context,
+        onSuccess: () => showSnackBar(context,
+            "User registered successfully. Login with the same credentials."),
+      );
     } catch (e) {
       showSnackBar(context, e.toString());
     }
@@ -95,12 +83,11 @@ class AuthService {
       errorHandler(
         response: res,
         context: context,
-        onSuccess: () {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              HomeScreen.routeName,
-              (route) => false,
-            );
-          });
+        onSuccess: () => Navigator.of(context).pushNamedAndRemoveUntil(
+          HomeScreen.routeName,
+          (route) => false,
+        ),
+      );
     } catch (e) {
       showSnackBar(context, e.toString());
     }
