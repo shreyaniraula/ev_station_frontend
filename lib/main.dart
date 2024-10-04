@@ -1,9 +1,9 @@
+import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/router.dart';
-// ignore: unused_import
-import 'package:ev_charge/screens/main_page.dart';
-import 'package:ev_charge/screens/verification/login_page.dart';
+import 'package:ev_charge/widgets/booking.dart';
 // import 'package:ev_charge/screens/verification/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:khalti_flutter/khalti_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,15 +14,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Ev Charging",
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromARGB(255, 248, 253, 253),
-      ),
-      onGenerateRoute: (settings) => generateRoute(settings),
-      debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
-      //const LoginPage(),
-    );
+    return KhaltiScope(
+        publicKey: kKhaltiApiKey,
+        builder: (context, navKey) {
+          return MaterialApp(
+            navigatorKey: navKey,
+            localizationsDelegates: const [KhaltiLocalizations.delegate],
+            title: "Ev Charging",
+            theme: ThemeData(
+              scaffoldBackgroundColor: const Color.fromARGB(255, 248, 253, 253),
+            ),
+            onGenerateRoute: (settings) => generateRoute(settings),
+            debugShowCheckedModeBanner: false,
+            home: const Booking(),
+            //const LoginPage(),
+          );
+        });
   }
 }

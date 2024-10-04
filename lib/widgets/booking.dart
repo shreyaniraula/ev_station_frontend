@@ -23,6 +23,7 @@ class _BookingState extends State<Booking> {
   }
 
   payWithKhaltiInApp() {
+    print('Clicked');
     KhaltiScope.of(context).pay(
       config: PaymentConfig(
         amount: 1000, //in paisa
