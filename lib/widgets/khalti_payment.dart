@@ -2,14 +2,14 @@ import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 
-class Booking extends StatefulWidget {
-  const Booking({super.key});
+class KhaltiPayment extends StatefulWidget {
+  const KhaltiPayment({super.key});
 
   @override
-  State<Booking> createState() => _BookingState();
+  State<KhaltiPayment> createState() => _KhaltiPaymentState();
 }
 
-class _BookingState extends State<Booking> {
+class _KhaltiPaymentState extends State<KhaltiPayment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +23,6 @@ class _BookingState extends State<Booking> {
   }
 
   payWithKhaltiInApp() {
-    print('Clicked');
     KhaltiScope.of(context).pay(
       config: PaymentConfig(
         amount: 1000, //in paisa

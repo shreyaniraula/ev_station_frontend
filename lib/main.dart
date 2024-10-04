@@ -1,6 +1,6 @@
 import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/router.dart';
-import 'package:ev_charge/widgets/booking.dart';
+import 'package:ev_charge/widgets/khalti_payment.dart';
 // import 'package:ev_charge/screens/verification/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             ),
             onGenerateRoute: (settings) => generateRoute(settings),
             debugShowCheckedModeBanner: false,
-            home: const Booking(),
+            home: const KhaltiPayment(),
             //const LoginPage(),
           );
         });

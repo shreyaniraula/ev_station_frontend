@@ -47,5 +47,5 @@ web/
 windows/
 .metadata
 
-lib/constants/api_key.dart
-lib/constants/cloudinary_keys.dart
+/lib/constants/api_key.dart
+/lib/constants/cloudinary_keys.dart
