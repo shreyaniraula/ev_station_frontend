@@ -15,7 +15,7 @@ List evStationsCoordinates = [
     'name': 'KMC EV station',
     'latitude': 27.68459852890479,
     'longitude': 85.41120564749042,
-    'address': 'Ward 18, Kathmandu, Nepal'
+    'address': 'Ward 18, Kathmandu'
   },
   {
     'name': 'Biratnagar station',
