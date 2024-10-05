@@ -46,3 +46,7 @@ test/
 web/
 windows/
 .metadata
+
+/lib/constants/api_key.dart
+/lib/constants/cloudinary_keys.dart
+/esewa_flutter_sdk/
