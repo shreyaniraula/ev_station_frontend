@@ -39,6 +39,7 @@ class _MapPageState extends State<MapPage> {
               _mapController = controller;
             },
           ),
+          //android:theme="@style/LaunchTheme"
           // SafeArea(
           //   child: Padding(
           //     padding: const EdgeInsets.all(8.0),
