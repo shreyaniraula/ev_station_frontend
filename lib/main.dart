@@ -1,12 +1,16 @@
 import 'package:ev_charge/constants/api_key.dart';
+import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/router.dart';
-import 'package:ev_charge/widgets/payment.dart';
-// import 'package:ev_charge/screens/verification/login_page.dart';
+import 'package:ev_charge/screens/home_screen.dart';
+import 'package:ev_charge/screens/verification/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,8 +30,9 @@ class MyApp extends StatelessWidget {
             ),
             onGenerateRoute: (settings) => generateRoute(settings),
             debugShowCheckedModeBanner: false,
-            home: const Payment(),
-            //const LoginPage(),
+            home: Provider.of<UserProvider>(context).user.token.isNotEmpty
+                ? const HomeScreen()
+                : const LoginPage(),
           );
         });
   }

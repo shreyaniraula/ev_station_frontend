@@ -1,20 +1,18 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:ev_charge/constants/error_handler.dart';
 import 'package:ev_charge/models/user.model.dart';
+import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/screens/home_screen.dart';
-// ignore: unused_import
 import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  get uri => null;
-
   Future<void> registerUser({
     required BuildContext context,
     String? username,
@@ -33,6 +31,7 @@ class AuthService {
         phoneNumber: phoneNumber ?? '',
         email: email ?? '',
         image: image,
+        token: '',
       );
 
       http.Response res = await http.post(
@@ -46,8 +45,10 @@ class AuthService {
       errorHandler(
         response: res,
         context: context,
-        onSuccess: () => showSnackBar(context,
-            "User registered successfully. Login with the same credentials."),
+        onSuccess: () => showSnackBar(
+          context,
+          "User registered successfully. Login with the same credentials.",
+        ),
       );
     } catch (e) {
       showSnackBar(context, e.toString());
@@ -81,13 +82,18 @@ class AuthService {
 
       // Handle response
       errorHandler(
-        response: res,
-        context: context,
-        onSuccess: () => Navigator.of(context).pushNamedAndRemoveUntil(
-          HomeScreen.routeName,
-          (route) => false,
-        ),
-      );
+          response: res,
+          context: context,
+          onSuccess: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+            await prefs.setString(
+                'x-auth-token', jsonDecode(res.body)['token']);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              HomeScreen.routeName,
+              (route) => false,
+            );
+          });
     } catch (e) {
       showSnackBar(context, e.toString());
     }
