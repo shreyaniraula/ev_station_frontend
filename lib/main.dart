@@ -3,18 +3,35 @@ import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/router.dart';
 import 'package:ev_charge/screens/home_screen.dart';
 import 'package:ev_charge/screens/verification/login_page.dart';
+import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
+  runApp(
+    MultiProvider(
       providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
-      child: const MyApp()));
+      child: const MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final AuthService authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    authService.getUserData(context);
+  }
 
   @override
   Widget build(BuildContext context) {
