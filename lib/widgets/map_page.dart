@@ -11,10 +11,8 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
-  // ignore: unused_field
   late GoogleMapController _mapController;
   final Location _locationController = Location();
-  // ignore: unused_field
   LatLng? _currentPosition;
 
   @override
@@ -39,7 +37,6 @@ class _MapPageState extends State<MapPage> {
               _mapController = controller;
             },
           ),
-          //android:theme="@style/LaunchTheme"
           // SafeArea(
           //   child: Padding(
           //     padding: const EdgeInsets.all(8.0),

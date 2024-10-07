@@ -11,24 +11,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: ^0.8.5+3 # Add this line
+  image_picker: ^1.1.2 # Add this line
   google_maps_flutter: ^2.9.0
   cupertino_icons: ^1.0.8
   file_picker: ^8.1.2
   http: ^1.2.2
-  location: ^5.0.0
-  connectivity_plus: ^2.3.0
+  location: ^6.0.2
+  connectivity_plus: ^6.0.5
   flutter_map: ^7.0.2
   geolocator: ^13.0.1
   cloudinary_public: ^0.23.1
   khalti_flutter: ^3.0.0
-  esewa_flutter_sdk:
-    path: ./esewa_flutter_sdk 
+  provider: ^6.1.2
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true

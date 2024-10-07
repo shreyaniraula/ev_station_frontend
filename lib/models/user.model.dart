@@ -8,6 +8,7 @@ class User {
   final String password;
   final String phoneNumber;
   final String email;
+  final String token;
   final File image;
 
   User({
@@ -18,6 +19,7 @@ class User {
     required this.phoneNumber,
     required this.email,
     required this.image,
+    required this.token,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,6 +31,7 @@ class User {
       'phoneNumber': phoneNumber,
       'email': email,
       'image': image,
+      'token': token,
     };
   }
 
@@ -41,6 +44,7 @@ class User {
       phoneNumber: map['phoneNumber'] ?? '',
       email: map['email'] ?? '',
       image: map['image'] ?? '',
+      token: map['token'] ?? '',
     );
   }
 
