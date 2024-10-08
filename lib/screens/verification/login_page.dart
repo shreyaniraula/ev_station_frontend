@@ -1,4 +1,3 @@
-import 'package:ev_charge/screens/home_screen.dart';
 import 'package:ev_charge/screens/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
@@ -6,6 +5,7 @@ import 'package:ev_charge/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
+  static const String routeName = '/login-page';
   const LoginPage({super.key});
 
   @override
@@ -106,11 +106,13 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _usernameController,
                         labelText: 'Username',
                         obscureText: false,
+                        icon: Icons.person,
                       ),
                       CustomTextfield(
                         controller: _passwordController,
                         labelText: 'Password',
                         obscureText: true,
+                        icon: Icons.lock,
                       ),
 
                       //Forgot Password
@@ -133,11 +135,11 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           if (isSelected[0]) {
                             // Authenticate user
-                            //loginUser();
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              HomeScreen.routeName,
-                              (route) => false,
-                            );
+                            loginUser();
+                            // Navigator.of(context).pushNamedAndRemoveUntil(
+                            //   HomeScreen.routeName,
+                            //   (route) => false,
+                            // );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -168,9 +170,10 @@ class _LoginPageState extends State<LoginPage> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignupUser()));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignupUser()),
+                        );
                       },
                       child: const Text(
                         "Sign Up",
@@ -181,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
