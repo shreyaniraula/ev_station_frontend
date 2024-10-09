@@ -1,3 +1,5 @@
+import 'package:ev_charge/screens/main_page.dart';
+import 'package:ev_charge/screens/verification/signup_station.dart';
 import 'package:ev_charge/screens/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
@@ -140,7 +142,14 @@ class _LoginPageState extends State<LoginPage> {
                             //   HomeScreen.routeName,
                             //   (route) => false,
                             // );
-                          }
+                          }else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainPage(),
+                            ),
+                          );
+                        }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(
@@ -169,18 +178,29 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignupUser()),
-                        );
+                        if (isSelected[0]) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignupUser(),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignupStation(),
+                            ),
+                          );
+                        }
                       },
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
-                            color: Color.fromARGB(249, 116, 221, 46),
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
+                          color: Color.fromARGB(249, 116, 221, 46),
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],

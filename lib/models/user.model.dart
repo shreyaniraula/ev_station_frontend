@@ -1,15 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
-
 class User {
   final String id;
   final String fullName;
   final String username;
   final String password;
   final String phoneNumber;
-  final String token;
+  final String accessToken;
   final String image;
 
   User({
@@ -19,7 +17,7 @@ class User {
     required this.password,
     required this.phoneNumber,
     required this.image,
-    required this.token,
+    required this.accessToken,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,7 +28,7 @@ class User {
       'password': password,
       'phoneNumber': phoneNumber,
       'image': image,
-      'token': token,
+      'accessToken': accessToken,
     };
   }
 
@@ -42,7 +40,7 @@ class User {
       password: map['password'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
       image: map['image'] ?? File(''),
-      token: map['token'] ?? '',
+      accessToken: map['accessToken'] ?? '',
     );
   }
 

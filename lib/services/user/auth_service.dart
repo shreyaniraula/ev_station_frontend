@@ -38,7 +38,7 @@ class AuthService {
         password: password,
         phoneNumber: phoneNumber,
         image: imageUrl,
-        token: '',
+        accessToken: '',
       );
 
       http.Response res = await http.post(
@@ -98,12 +98,14 @@ class AuthService {
           context: context,
           onSuccess: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            print("Inside error handler");
-            print(jsonDecode(res.body)['data']['user'].toString());
             Provider.of<UserProvider>(context, listen: false)
-                .setUser(jsonDecode(res.body)['data']['user'].toString());
+                .setUser(jsonEncode(jsonDecode(res.body)['data']));
+
+            print('Error');
             await prefs.setString(
                 'x-auth-token', jsonDecode(res.body)['data']['accessToken']);
+
+            print('Error 2');
             Navigator.of(context).pushNamedAndRemoveUntil(
               HomeScreen.routeName,
               (route) => false,
