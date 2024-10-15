@@ -101,14 +101,11 @@ class AuthService {
             Provider.of<UserProvider>(context, listen: false)
                 .setUser(jsonEncode(jsonDecode(res.body)['data']));
 
-            print('Error');
             await prefs.setString(
                 'x-auth-token', jsonDecode(res.body)['data']['accessToken']);
 
-            print('Error 2');
-            Navigator.of(context).pushNamedAndRemoveUntil(
+            Navigator.of(context).pushNamed(
               HomeScreen.routeName,
-              (route) => false,
             );
           });
     } catch (e) {
@@ -118,16 +115,12 @@ class AuthService {
 
   void getUserData(BuildContext context) async {
     try {
-      var userProvider = Provider.of<UserProvider>(context, listen: false);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
 
       if (token == null) {
         prefs.setString('x-auth-token', '');
       }
-
-      print('***********************************');
-      print('here');
 
       http.Response tokenRes = await http.get(
         Uri.parse('$uri/api/v1/users/token-is-valid'),
@@ -137,11 +130,7 @@ class AuthService {
         },
       );
 
-      print(tokenRes.body);
-
       var response = jsonDecode(tokenRes.body);
-
-      print(response);
 
       if (response == true) {
         http.Response userRes = await http.get(
@@ -151,8 +140,8 @@ class AuthService {
             'x-auth-token': token,
           },
         );
-        print("User res.body");
-        print(userRes.body);
+
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
         userProvider.setUser(userRes.body);
       }
     } catch (e) {

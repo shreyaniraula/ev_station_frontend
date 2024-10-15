@@ -31,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     authService.getUserData(context);
+    // print(Provider.of<UserProvider>(context, listen: false).user.toJson());
   }
 
   @override
