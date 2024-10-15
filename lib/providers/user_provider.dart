@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:ev_charge/models/user.model.dart';
 import 'package:flutter/material.dart';
 
@@ -10,9 +8,8 @@ class UserProvider extends ChangeNotifier {
     fullName: '',
     password: '',
     phoneNumber: '',
-    email: '',
-    image: File(''),
-    token: '',
+    image: '',
+    accessToken: '',
   );
 
   User get user => _user;

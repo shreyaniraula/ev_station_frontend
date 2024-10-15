@@ -1,4 +1,5 @@
-import 'package:ev_charge/screens/home_screen.dart';
+import 'package:ev_charge/screens/main_page.dart';
+import 'package:ev_charge/screens/verification/signup_station.dart';
 import 'package:ev_charge/screens/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
@@ -6,6 +7,7 @@ import 'package:ev_charge/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
+  static const String routeName = '/login-page';
   const LoginPage({super.key});
 
   @override
@@ -106,11 +108,13 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _usernameController,
                         labelText: 'Username',
                         obscureText: false,
+                        icon: Icons.person,
                       ),
                       CustomTextfield(
                         controller: _passwordController,
                         labelText: 'Password',
                         obscureText: true,
+                        icon: Icons.lock,
                       ),
 
                       //Forgot Password
@@ -133,12 +137,19 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           if (isSelected[0]) {
                             // Authenticate user
-                            //loginUser();
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              HomeScreen.routeName,
-                              (route) => false,
-                            );
-                          }
+                            loginUser();
+                            // Navigator.of(context).pushNamedAndRemoveUntil(
+                            //   HomeScreen.routeName,
+                            //   (route) => false,
+                            // );
+                          }else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MainPage(),
+                            ),
+                          );
+                        }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(
@@ -167,21 +178,33 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        if (isSelected[0]) {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SignupUser()));
+                              builder: (context) => const SignupUser(),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignupStation(),
+                            ),
+                          );
+                        }
                       },
                       child: const Text(
                         "Sign Up",
                         style: TextStyle(
-                            color: Color.fromARGB(249, 116, 221, 46),
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
+                          color: Color.fromARGB(249, 116, 221, 46),
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),

@@ -7,9 +7,8 @@ class User {
   final String username;
   final String password;
   final String phoneNumber;
-  final String email;
-  final String token;
-  final File image;
+  final String accessToken;
+  final String image;
 
   User({
     required this.id,
@@ -17,9 +16,8 @@ class User {
     required this.fullName,
     required this.password,
     required this.phoneNumber,
-    required this.email,
     required this.image,
-    required this.token,
+    required this.accessToken,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,9 +27,8 @@ class User {
       'username': username,
       'password': password,
       'phoneNumber': phoneNumber,
-      'email': email,
       'image': image,
-      'token': token,
+      'accessToken': accessToken,
     };
   }
 
@@ -42,9 +39,8 @@ class User {
       username: map['username'] ?? '',
       password: map['password'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
-      email: map['email'] ?? '',
-      image: map['image'] ?? '',
-      token: map['token'] ?? '',
+      image: map['image'] ?? File(''),
+      accessToken: map['accessToken'] ?? '',
     );
   }
 
