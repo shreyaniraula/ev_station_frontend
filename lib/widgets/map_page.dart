@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:ev_charge/constants/ev_station_coordinates.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -11,9 +14,12 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   static const LatLng _initialPosition = LatLng(26.4525, 87.2718);
-  late GoogleMapController _mapController;
+  final Completer<GoogleMapController> _mapController =
+      Completer<GoogleMapController>();
+
   final Location _locationController = Location();
   LatLng? _currentPosition;
+  final Set<Marker> _markers = {};
 
   @override
   void initState() {
@@ -29,84 +35,16 @@ class _MapPageState extends State<MapPage> {
       body: Stack(
         children: [
           GoogleMap(
+            markers: _markers,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
             initialCameraPosition: const CameraPosition(
               target: _initialPosition,
               zoom: 13.0,
             ),
-            onMapCreated: (GoogleMapController controller) {
-              _mapController = controller;
-            },
+            onMapCreated: ((GoogleMapController controller) =>
+                _mapController.complete(controller)),
           ),
-          // SafeArea(
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(8.0),
-          //     child: Column(
-          //       children: [
-          //         // Search box and icons
-          //         Container(
-          //           margin: const EdgeInsets.symmetric(horizontal: 16),
-          //           padding:
-          //               const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          //           decoration: BoxDecoration(
-          //             color: Colors.grey.shade300,
-          //             borderRadius: BorderRadius.circular(16),
-          //           ),
-          //           child: Row(
-          //             children: [
-          //               TextField(
-          //                 obscureText: true,
-          //                 style: const TextStyle(color: Colors.white),
-          //                 decoration: InputDecoration(
-          //                   labelText: 'Your Location',
-          //                   labelStyle: const TextStyle(
-          //                     color: Color.fromARGB(255, 145, 145, 145),
-          //                   ),
-          //                   enabledBorder: OutlineInputBorder(
-          //                     borderRadius: BorderRadius.circular(20),
-          //                     borderSide: const BorderSide(color: Colors.white),
-          //                   ),
-          //                   focusedBorder: OutlineInputBorder(
-          //                     borderRadius: BorderRadius.circular(20),
-          //                     borderSide: const BorderSide(
-          //                         color: Color.fromRGBO(205, 221, 169, 0.651)),
-          //                   ),
-          //                   filled: true,
-          //                   fillColor: Colors.white,
-          //                 ),
-          //               ),
-          //               const Spacer(),
-          //               const Icon(Icons.filter_alt, color: Colors.green),
-          //             ],
-          //           ),
-          //         ),
-          //         const SizedBox(height: 20),
-          //         // Circular buttons on the right side
-          //         Align(
-          //           alignment: Alignment.topRight,
-          //           child: Column(
-          //             mainAxisSize: MainAxisSize.min,
-          //             children: [
-          //               IconButton(
-          //                 icon: const Icon(
-          //                   Icons.location_pin,
-          //                   color: Colors.green,
-          //                 ),
-          //                 onPressed: () {},
-          //               ),
-          //               IconButton(
-          //                 icon: const Icon(
-          //                   Icons.phone,
-          //                   color: Colors.green,
-          //                 ),
-          //                 onPressed: () {},
-          //               ),
-          //             ],
-          //      jfsdjjfjfjdjfj     ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -138,8 +76,23 @@ class _MapPageState extends State<MapPage> {
             currentLocation.latitude!,
             currentLocation.longitude!,
           );
+          displayMarkers();
         });
       }
     });
+  }
+
+  Future<void> displayMarkers() async {
+    for (var data in evStationsCoordinates) {
+      _markers.add(Marker(
+        markerId: const MarkerId('_destinationMarker'),
+        position: LatLng(data['latitude'], data['longitude']),
+        icon: await BitmapDescriptor.asset(
+          const ImageConfiguration(size: Size(60, 60)),
+          'assets/images/charging_station.png',
+        ),
+        infoWindow: InfoWindow(title: data['name']),
+      ));
+    }
   }
 }
