@@ -41,7 +41,7 @@ class _SignupStationState extends State<SignupStation> {
       password: _passwordController.text,
       phoneNumber: _phoneController.text,
       location: _locationController.text,
-      noOfSlots: _slotsController.text,
+      noOfSlots: int.tryParse(_slotsController.text)!,
       image: _image!,
     );
   }

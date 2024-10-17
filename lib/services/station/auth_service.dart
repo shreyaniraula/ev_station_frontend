@@ -19,7 +19,7 @@ class AuthService {
     required String password,
     required String phoneNumber,
     required String location,
-    required String noOfSlots,
+    required int noOfSlots,
     required XFile image,
   }) async {
     try {
@@ -38,7 +38,8 @@ class AuthService {
         location: location,
         panCard: imageUrl,
         noOfSlots: noOfSlots,
-        reservedSlots: '0',
+        reservedSlots: 0,
+        isVerified: false,
       );
 
       http.Response res = await http.post(

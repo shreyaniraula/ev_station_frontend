@@ -1,8 +1,40 @@
-import 'package:ev_charge/constants/ev_station_coordinates.dart';
+import 'dart:convert';
+import 'package:ev_charge/models/station.model.dart';
+import 'package:ev_charge/uri.dart';
+import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class StationDetailsScreen extends StatelessWidget {
+class StationDetailsScreen extends StatefulWidget {
+  static const String routeName = '/station-details-screen';
+  // final String username;
   const StationDetailsScreen({super.key});
+
+  @override
+  State<StationDetailsScreen> createState() => _StationDetailsScreenState();
+}
+
+class _StationDetailsScreenState extends State<StationDetailsScreen> {
+  Station station = Station(
+    id: '',
+    name: '',
+    username: '',
+    phoneNumber: '',
+    password: '',
+    location: '',
+    panCard: '',
+    noOfSlots: 0,
+    reservedSlots: 0,
+    isVerified: false,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    getStationDetails('banepa_ev_station').then((response) {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +56,14 @@ class StationDetailsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  evStationsCoordinates[0]['name'],
+                  station.name,
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  evStationsCoordinates[0]['address'],
+                  station.location,
                   style: TextStyle(
                     fontSize: 18,
                   ),
@@ -53,7 +85,7 @@ class StationDetailsScreen extends StatelessWidget {
                     ),
                     SizedBox(width: 5),
                     Text(
-                      '9812345670',
+                      station.phoneNumber,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w300,
@@ -63,7 +95,7 @@ class StationDetailsScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Total Slots: 2',
+                  'Number of Slots: ${station.noOfSlots.toString()}',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w300,
@@ -86,17 +118,36 @@ class StationDetailsScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              width: double.infinity,
-              color: Colors.red[100],
-              child: Text(
-                'This station is not verified yet.',
-                style: TextStyle(fontSize: 18),
+            if (!station.isVerified)
+              Container(
+                width: double.infinity,
+                color: Colors.red[100],
+                child: Text(
+                  'This station is not verified yet.',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
-            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> getStationDetails(String username) async {
+    try {
+      http.Response stationRes = await http.get(
+        Uri.parse('$uri/api/v1/stations/station-details'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'stationUsername': username,
+        },
+      );
+
+      station =
+          Station.fromJson(jsonEncode(jsonDecode(stationRes.body)['data']));
+    } catch (e) {
+      e.toString();
+      showSnackBar(context, 'Something went wrong while displaying stations');
+    }
   }
 }
