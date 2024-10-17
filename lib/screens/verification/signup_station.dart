@@ -41,7 +41,7 @@ class _SignupStationState extends State<SignupStation> {
       password: _passwordController.text,
       phoneNumber: _phoneController.text,
       location: _locationController.text,
-      noOfSlots: _slotsController.text,
+      noOfSlots: int.tryParse(_slotsController.text)!,
       image: _image!,
     );
   }
@@ -66,7 +66,7 @@ class _SignupStationState extends State<SignupStation> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.asset(
-                        'assets/images/Ev_image.png',
+                        'assets/images/ev_image.png',
                         height: 150,
                         fit: BoxFit.cover,
                         width: double.infinity,

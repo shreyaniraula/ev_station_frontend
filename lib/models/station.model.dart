@@ -8,8 +8,9 @@ class Station {
   final String password;
   final String location;
   final String panCard;
-  final String noOfSlots;
-  final String reservedSlots;
+  final int noOfSlots;
+  final int reservedSlots;
+  final bool isVerified;
 
   Station({
     required this.id,
@@ -21,6 +22,7 @@ class Station {
     required this.panCard,
     required this.noOfSlots,
     required this.reservedSlots,
+    required this.isVerified,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,6 +36,7 @@ class Station {
       'panCard': panCard,
       'noOfSlots': noOfSlots,
       'reservedSlots': reservedSlots,
+      'isVerified': isVerified,
     };
   }
 
@@ -48,6 +51,7 @@ class Station {
       panCard: map['panCard'] ?? '',
       noOfSlots: map['noOfSlots'] ?? '',
       reservedSlots: map['reservedSlots'] ?? '',
+      isVerified: map['isVerified'] ?? false,
     );
   }
 

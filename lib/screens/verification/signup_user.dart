@@ -63,7 +63,7 @@ class _SignupUserState extends State<SignupUser> {
                       borderRadius:
                           BorderRadius.circular(20), // Rounded corners
                       child: Image.asset(
-                        'assets/images/Ev_image.png',
+                        'assets/images/ev_image.png',
                         height: 150,
                         fit: BoxFit.cover, // Adjust image to cover the space
                         width: double.infinity,
