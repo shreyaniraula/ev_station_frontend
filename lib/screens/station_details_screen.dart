@@ -23,6 +23,7 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
     password: '',
     location: '',
     panCard: '',
+    stationImage: '',
     noOfSlots: 0,
     reservedSlots: 0,
     isVerified: false,
