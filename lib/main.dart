@@ -47,9 +47,10 @@ class _MyAppState extends State<MyApp> {
             ),
             onGenerateRoute: (settings) => generateRoute(settings),
             debugShowCheckedModeBanner: false,
-            home: Provider.of<UserProvider>(context).user.accessToken.isNotEmpty
-                ? const HomeScreen()
-                : const LoginPage(),
+            home: const HomeScreen(),
+            // Provider.of<UserProvider>(context).user.accessToken.isNotEmpty
+            //     ? const HomeScreen()
+            //     : const LoginPage(),
           );
         });
   }

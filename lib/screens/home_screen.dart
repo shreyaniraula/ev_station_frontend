@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Watt to do'),
+        title: index == 0 ? const Text('Nearby Stations'): const Text('Book Station'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
