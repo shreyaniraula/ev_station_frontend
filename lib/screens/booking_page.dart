@@ -15,6 +15,8 @@ class _BookingPageState extends State<BookingPage> {
   final TextEditingController arrivalTimeController = TextEditingController();
   final TextEditingController chargingDurationController =
       TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,55 +27,62 @@ class _BookingPageState extends State<BookingPage> {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomTextfield(
-                labelText: 'Charging Station',
-                obscureText: false,
-                controller: chargingStationController,
-                icon: Icons.business,
-              ),
-              const SizedBox(height: 20),
-              CustomTextfield(
-                labelText: 'Arrival Time',
-                obscureText: false,
-                controller: arrivalTimeController,
-                icon: Icons.watch,
-              ),
-              const SizedBox(height: 20),
-              CustomTextfield(
-                labelText: 'Charging Duration',
-                obscureText: false,
-                controller: chargingDurationController,
-                icon: Icons.timelapse,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Note: You would not get the refund of the payment and you are supposed to reach the charging station within 30 minutes of your booking. Otherwise, your booking might get cancelled.',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.justify,
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(KhaltiScreen.routeName);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 17, 163, 90), // Button color
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomTextfield(
+                  labelText: 'Charging Station',
+                  obscureText: false,
+                  controller: chargingStationController,
+                  icon: Icons.business,
                 ),
-                child: const Text(
-                  'Book with Khalti',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
+                const SizedBox(height: 20),
+                CustomTextfield(
+                  labelText: 'Arrival Time',
+                  obscureText: false,
+                  controller: arrivalTimeController,
+                  icon: Icons.watch,
+                ),
+                const SizedBox(height: 20),
+                CustomTextfield(
+                  labelText: 'Charging Duration',
+                  obscureText: false,
+                  controller: chargingDurationController,
+                  icon: Icons.timelapse,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Note: You would not get the refund of the payment and you are supposed to reach the charging station within 30 minutes of your booking. Otherwise, your booking might get cancelled.',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.justify,
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Navigator.of(context).pushNamed(KhaltiScreen.routeName);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        const Color.fromARGB(255, 17, 163, 90), // Button color
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 50,
+                      vertical: 15,
+                    ),
+                  ),
+                  child: const Text(
+                    'Book with Khalti',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
