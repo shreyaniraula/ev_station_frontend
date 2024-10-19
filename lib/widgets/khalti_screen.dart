@@ -2,14 +2,15 @@ import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 
-class Payment extends StatefulWidget {
-  const Payment({super.key});
+class KhaltiScreen extends StatefulWidget {
+  static const String routeName = '/khalti-screen';
+  const KhaltiScreen({super.key});
 
   @override
-  State<Payment> createState() => _PaymentState();
+  State<KhaltiScreen> createState() => _KhaltiScreenState();
 }
 
-class _PaymentState extends State<Payment> {
+class _KhaltiScreenState extends State<KhaltiScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

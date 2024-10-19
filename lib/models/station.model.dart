@@ -8,6 +8,7 @@ class Station {
   final String password;
   final String location;
   final String panCard;
+  final String stationImage;
   final int noOfSlots;
   final int reservedSlots;
   final bool isVerified;
@@ -20,6 +21,7 @@ class Station {
     required this.password,
     required this.location,
     required this.panCard,
+    required this.stationImage,
     required this.noOfSlots,
     required this.reservedSlots,
     required this.isVerified,
@@ -34,6 +36,7 @@ class Station {
       'password': password,
       'location': location,
       'panCard': panCard,
+      'stationImage': stationImage,
       'noOfSlots': noOfSlots,
       'reservedSlots': reservedSlots,
       'isVerified': isVerified,
@@ -49,6 +52,7 @@ class Station {
       password: map['password'] ?? '',
       location: map['location'] ?? '',
       panCard: map['panCard'] ?? '',
+      stationImage: map['stationImage'] ?? '',
       noOfSlots: map['noOfSlots'] ?? '',
       reservedSlots: map['reservedSlots'] ?? '',
       isVerified: map['isVerified'] ?? false,

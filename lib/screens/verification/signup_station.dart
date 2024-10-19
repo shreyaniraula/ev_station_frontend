@@ -22,15 +22,14 @@ class _SignupStationState extends State<SignupStation> {
 
   final AuthService _authService = AuthService();
 
-  XFile? _image;
+  XFile? panCardImage, stationImage;
 
-  Future<void> _pickImage() async {
+  Future<XFile?> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? pickedImage =
         await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _image = pickedImage;
-    });
+
+    return pickedImage;
   }
 
   void registerStation() {
@@ -42,7 +41,8 @@ class _SignupStationState extends State<SignupStation> {
       phoneNumber: _phoneController.text,
       location: _locationController.text,
       noOfSlots: int.tryParse(_slotsController.text)!,
-      image: _image!,
+      panCardImage: panCardImage!,
+      stationImage: stationImage!,
     );
   }
 
@@ -136,11 +136,25 @@ class _SignupStationState extends State<SignupStation> {
                           obscureText: false,
                         ),
                         const SizedBox(height: 20),
+                        Text(
+                          'Please upload an image of the Station',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
                         GestureDetector(
-                          onTap: _pickImage,
+                          onTap: () async {
+                            XFile? image = await _pickImage();
+                            if (image != null) {
+                              setState(() {
+                                stationImage = image;
+                              });
+                            }
+                          },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: _image == null
+                            child: stationImage == null
                                 ? Container(
                                     height: 150,
                                     width: double.infinity,
@@ -155,7 +169,48 @@ class _SignupStationState extends State<SignupStation> {
                                     ),
                                   )
                                 : Image.file(
-                                    File(_image!.path),
+                                    File(stationImage!.path),
+                                    height: 150,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'Please upload an image of Pan Card',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            XFile? image = await _pickImage();
+                            if (image != null) {
+                              setState(() {
+                                panCardImage = image;
+                              });
+                            }
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: panCardImage == null
+                                ? Container(
+                                    height: 150,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Icon(
+                                      Icons.add_a_photo,
+                                      color: Colors.grey,
+                                      size: 50,
+                                    ),
+                                  )
+                                : Image.file(
+                                    File(panCardImage!.path),
                                     height: 150,
                                     width: double.infinity,
                                     fit: BoxFit.cover,

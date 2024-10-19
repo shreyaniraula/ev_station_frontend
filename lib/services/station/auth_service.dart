@@ -20,15 +20,22 @@ class AuthService {
     required String phoneNumber,
     required String location,
     required int noOfSlots,
-    required XFile image,
+    required XFile panCardImage,
+    required XFile stationImage,
   }) async {
     try {
       final cloudinary =
           CloudinaryPublic(kCloudinaryCloudName, kCloudinaryUploadPreset);
 
-      CloudinaryResponse cloudinaryRes = await cloudinary
-          .uploadFile(CloudinaryFile.fromFile(image.path, folder: 'station'));
-      final imageUrl = cloudinaryRes.secureUrl;
+      CloudinaryResponse panCardRes = await cloudinary
+          .uploadFile(CloudinaryFile.fromFile(panCardImage.path, folder: 'station/pancard'));
+
+      CloudinaryResponse stationImageRes = await cloudinary
+          .uploadFile(CloudinaryFile.fromFile(stationImage.path, folder: 'station/image'));
+      final panCardImageUrl = panCardRes.secureUrl;
+
+      final stationImageUrl = stationImageRes.secureUrl;
+
       Station station = Station(
         id: '',
         name: stationName,
@@ -36,7 +43,8 @@ class AuthService {
         phoneNumber: phoneNumber,
         password: password,
         location: location,
-        panCard: imageUrl,
+        panCard: panCardImageUrl,
+        stationImage: stationImageUrl,
         noOfSlots: noOfSlots,
         reservedSlots: 0,
         isVerified: false,
