@@ -1,5 +1,7 @@
 import 'package:ev_charge/screens/home_screen.dart';
 import 'package:ev_charge/screens/station_details_screen.dart';
+import 'package:ev_charge/screens/update_password_page.dart';
+import 'package:ev_charge/screens/update_user_details_page.dart';
 import 'package:ev_charge/screens/verification/login_page.dart';
 import 'package:ev_charge/widgets/khalti_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,16 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
       return MaterialPageRoute(
         settings: routesettings,
         builder: (_) => const KhaltiScreen(),
+      );
+    case UpdateUserDetailsPage.routeName:
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => const UpdateUserDetailsPage(),
+      );
+    case UpdatePasswordPage.routeName:
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => const UpdatePasswordPage(),
       );
     default:
       return MaterialPageRoute(

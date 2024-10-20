@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class CustomTextbutton extends StatelessWidget {
   final String buttonText;
   final IconData frontIcon;
+  final VoidCallback? onTap;
   const CustomTextbutton(
-      {super.key, required this.buttonText, required this.frontIcon});
+      {super.key, required this.buttonText, required this.frontIcon, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: SizedBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
