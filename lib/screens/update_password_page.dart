@@ -1,3 +1,4 @@
+import 'package:ev_charge/services/user/update_user.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,16 @@ class UpdatePasswordPage extends StatelessWidget {
 
     final TextEditingController oldPasswordController = TextEditingController();
     final TextEditingController newPasswordController = TextEditingController();
+
+    final UpdateUser updateUser = UpdateUser();
+
+    void updatePassword() {
+      updateUser.changePassword(
+        context: context,
+        oldPassword: oldPasswordController.text,
+        newPassword: newPasswordController.text,
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -50,8 +61,8 @@ class UpdatePasswordPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        showSnackBar(context, 'Password Updated Successfully');
-                        Navigator.of(context).pop();
+                        updatePassword();
+                        // Navigator.of(context).pop();
                       }
                     },
                     style: ElevatedButton.styleFrom(
