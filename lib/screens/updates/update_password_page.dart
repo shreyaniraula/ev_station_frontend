@@ -1,5 +1,4 @@
 import 'package:ev_charge/services/user/update_user.dart';
-import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:ev_charge/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +16,7 @@ class UpdatePasswordPage extends StatelessWidget {
     final UpdateUser updateUser = UpdateUser();
 
     void updatePassword() {
-      updateUser.changePassword(
+      updateUser.updatePassword(
         context: context,
         oldPassword: oldPasswordController.text,
         newPassword: newPasswordController.text,

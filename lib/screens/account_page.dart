@@ -1,5 +1,6 @@
-import 'package:ev_charge/screens/update_password_page.dart';
-import 'package:ev_charge/screens/update_user_details_page.dart';
+import 'package:ev_charge/screens/updates/update_image_page.dart';
+import 'package:ev_charge/screens/updates/update_password_page.dart';
+import 'package:ev_charge/screens/updates/update_user_details_page.dart';
 import 'package:ev_charge/widgets/custom_textbutton.dart';
 import 'package:flutter/material.dart';
 
@@ -43,11 +44,16 @@ class _AccountPageState extends State<AccountPage> {
           CustomTextbutton(
             buttonText: 'Change Password',
             frontIcon: Icons.lock,
-            onTap: () => Navigator.of(context)
-                .pushNamed(UpdatePasswordPage.routeName),
+            onTap: () =>
+                Navigator.of(context).pushNamed(UpdatePasswordPage.routeName),
           ),
           Divider(thickness: 2, color: Colors.black),
-          CustomTextbutton(buttonText: 'Change Photo', frontIcon: Icons.image),
+          CustomTextbutton(
+            buttonText: 'Update Image',
+            frontIcon: Icons.image,
+            onTap: () =>
+                Navigator.of(context).pushNamed(UpdateImagePage.routeName),
+          ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
               buttonText: 'Notification Settings',
