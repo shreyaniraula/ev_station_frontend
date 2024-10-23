@@ -8,7 +8,7 @@ class CustomTextfield extends StatelessWidget {
   const CustomTextfield({
     super.key,
     this.labelText,
-   required this.obscureText,
+    required this.obscureText,
     required this.controller,
     required this.icon,
   });

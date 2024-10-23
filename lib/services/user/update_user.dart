@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:ev_charge/constants/cloudinary_keys.dart';
+import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/constants/error_handler.dart';
 import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
@@ -47,7 +47,9 @@ class UpdateUser {
         );
       }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 
@@ -93,7 +95,9 @@ class UpdateUser {
         );
       }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 }
