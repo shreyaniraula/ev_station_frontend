@@ -1,8 +1,9 @@
+import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/screens/main_page.dart';
 import 'package:ev_charge/screens/verification/signup_station.dart';
 import 'package:ev_charge/screens/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
-import 'package:ev_charge/widgets/custom_textfield.dart';
+import 'package:ev_charge/utils/custom_textfield.dart';
 
 import 'package:flutter/material.dart';
 
@@ -142,21 +143,16 @@ class _LoginPageState extends State<LoginPage> {
                             //   HomeScreen.routeName,
                             //   (route) => false,
                             // );
-                          }else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainPage(),
-                            ),
-                          );
-                        }
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainPage(),
+                              ),
+                            );
+                          }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(
-                              255, 17, 163, 90), // Button color
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                        ),
+                        style: elevatedButtonStyle,
                         child: const Text(
                           'Log in',
                           style: TextStyle(color: Colors.white),

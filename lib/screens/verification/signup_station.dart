@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/services/station/auth_service.dart';
-import 'package:ev_charge/widgets/custom_textfield.dart';
+import 'package:ev_charge/utils/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -25,9 +26,9 @@ class _SignupStationState extends State<SignupStation> {
   XFile? panCardImage, stationImage;
 
   Future<XFile?> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final XFile? pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery);
+        await picker.pickImage(source: ImageSource.gallery);
 
     return pickedImage;
   }
@@ -224,16 +225,7 @@ class _SignupStationState extends State<SignupStation> {
                               registerStation();
                             }
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 17, 163, 90),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            elevation: 5,
-                          ),
+                          style: elevatedButtonStyle,
                           child: const Text(
                             'Continue',
                             style: TextStyle(color: Colors.white, fontSize: 16),

@@ -1,5 +1,6 @@
-import 'package:ev_charge/widgets/custom_textfield.dart';
-import 'package:ev_charge/widgets/khalti_screen.dart';
+import 'package:ev_charge/constants/styling_variables.dart';
+import 'package:ev_charge/utils/custom_textfield.dart';
+import 'package:ev_charge/screens/khalti_screen.dart';
 import 'package:flutter/material.dart';
 
 class BookingPage extends StatefulWidget {
@@ -65,14 +66,7 @@ class _BookingPageState extends State<BookingPage> {
                       Navigator.of(context).pushNamed(KhaltiScreen.routeName);
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        const Color.fromARGB(255, 17, 163, 90), // Button color
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 50,
-                      vertical: 15,
-                    ),
-                  ),
+                  style: elevatedButtonStyle,
                   child: const Text(
                     'Book with Khalti',
                     style: TextStyle(

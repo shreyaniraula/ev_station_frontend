@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:cloudinary_public/cloudinary_public.dart';
-import 'package:ev_charge/constants/cloudinary_keys.dart';
+import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/constants/error_handler.dart';
 import 'package:ev_charge/models/user.model.dart';
 import 'package:ev_charge/providers/user_provider.dart';
@@ -10,7 +10,6 @@ import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,7 +48,8 @@ class AuthService {
         },
       );
 
-      errorHandler(
+      if (context.mounted) {
+        errorHandler(
           response: res,
           context: context,
           onSuccess: () {
@@ -61,9 +61,13 @@ class AuthService {
               LoginPage.routeName,
               (route) => false,
             );
-          });
+          },
+        );
+      }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 
@@ -73,13 +77,6 @@ class AuthService {
     required String password,
   }) async {
     try {
-      // Check network connectivity
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.none) {
-        showSnackBar(context, "No internet connection");
-        return;
-      }
-
       // Send login request
       http.Response res = await http.post(
         Uri.parse('$uri/api/v1/users/login'),
@@ -92,24 +89,33 @@ class AuthService {
         },
       );
 
-      // Handle response
-      errorHandler(
+      if (context.mounted) {
+        // Handle response
+        errorHandler(
           response: res,
           context: context,
           onSuccess: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            Provider.of<UserProvider>(context, listen: false)
-                .setUser(jsonEncode(jsonDecode(res.body)['data']));
+            if (context.mounted) {
+              Provider.of<UserProvider>(context, listen: false)
+                  .setUser(jsonEncode(jsonDecode(res.body)['data']));
+            }
 
             await prefs.setString(
                 'x-auth-token', jsonDecode(res.body)['data']['accessToken']);
 
-            Navigator.of(context).pushNamed(
-              HomeScreen.routeName,
-            );
-          });
+            if (context.mounted) {
+              Navigator.of(context).pushNamed(
+                HomeScreen.routeName,
+              );
+            }
+          },
+        );
+      }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 
@@ -141,11 +147,49 @@ class AuthService {
           },
         );
 
-        var userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUser(userRes.body);
+        if (context.mounted) {
+          var userProvider = Provider.of<UserProvider>(context, listen: false);
+          userProvider.setUser(userRes.body);
+        }
       }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
+    }
+  }
+
+  Future<void> logoutUser({required BuildContext context}) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('x-auth-token');
+
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/v1/users/logout'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
+        },
+      );
+
+      if (context.mounted) {
+        errorHandler(
+          response: res,
+          context: context,
+          onSuccess: () {
+            prefs.setString('x-auth-token', '');
+            showSnackBar(
+              context,
+              "User logged out successfully.",
+            );
+            Navigator.of(context).pushNamed(LoginPage.routeName);
+          },
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 }

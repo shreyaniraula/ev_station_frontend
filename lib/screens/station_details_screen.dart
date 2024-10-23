@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/models/station.model.dart';
 import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
@@ -112,9 +113,7 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 156, 240, 88),
-                  ),
+                  style: elevatedButtonStyle,
                   child: Text('Book Station'),
                 ),
               ],
@@ -147,8 +146,9 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
       station =
           Station.fromJson(jsonEncode(jsonDecode(stationRes.body)['data']));
     } catch (e) {
-      e.toString();
-      showSnackBar(context, 'Something went wrong while displaying stations');
+      if (context.mounted) {
+        showSnackBar(context, 'Something went wrong while displaying stations');
+      }
     }
   }
 }

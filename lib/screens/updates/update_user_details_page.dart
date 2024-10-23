@@ -1,5 +1,6 @@
+import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
-import 'package:ev_charge/widgets/custom_textfield.dart';
+import 'package:ev_charge/utils/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class UpdateUserDetailsPage extends StatelessWidget {
@@ -65,15 +66,7 @@ class UpdateUserDetailsPage extends StatelessWidget {
                         Navigator.of(context).pop();
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 17, 163, 90),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      elevation: 5,
-                    ),
+                    style: elevatedButtonStyle,
                     child: const Text(
                       'Update',
                       style: TextStyle(color: Colors.white, fontSize: 16),
