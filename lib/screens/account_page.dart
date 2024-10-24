@@ -3,6 +3,7 @@ import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/screens/updates/update_image_page.dart';
 import 'package:ev_charge/screens/updates/update_password_page.dart';
 import 'package:ev_charge/screens/updates/update_user_details_page.dart';
+import 'package:ev_charge/services/station/get_stations.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/utils/custom_textbutton.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   final AuthService authService = AuthService();
+  final GetStations getStations = GetStations();
 
   String greeting() {
     final hour = DateTime.now().hour;
@@ -30,6 +32,12 @@ class _AccountPageState extends State<AccountPage> {
 
   void logoutUser() {
     authService.logoutUser(context: context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getStations.getAllStations(context: context);
   }
 
   @override
