@@ -35,12 +35,6 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    getStations.getAllStations(context: context);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
 
@@ -91,8 +85,10 @@ class _AccountPageState extends State<AccountPage> {
           ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
-              buttonText: 'Notification Settings',
-              frontIcon: Icons.notifications),
+            buttonText: 'Notification Settings',
+            frontIcon: Icons.notifications,
+            onTap: () => getStations.getAllStations(context: context),
+          ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(buttonText: 'Help', frontIcon: Icons.help),
           Divider(thickness: 2, color: Colors.black),

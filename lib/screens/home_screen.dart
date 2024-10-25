@@ -1,6 +1,7 @@
 import 'package:ev_charge/screens/account_page.dart';
 import 'package:ev_charge/screens/booking_page.dart';
 import 'package:ev_charge/screens/station_details_screen.dart';
+import 'package:ev_charge/screens/stations_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: index == 0
-          ? const StationDetailsScreen()
+          ? StationsPage()
           : index == 1
               ? const BookingPage()
               : const AccountPage(),
