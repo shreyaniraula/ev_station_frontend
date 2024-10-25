@@ -1,5 +1,6 @@
 import 'package:ev_charge/screens/home_screen.dart';
 import 'package:ev_charge/screens/station_details_screen.dart';
+import 'package:ev_charge/screens/stations_page.dart';
 import 'package:ev_charge/screens/updates/update_image_page.dart';
 import 'package:ev_charge/screens/updates/update_password_page.dart';
 import 'package:ev_charge/screens/updates/update_user_details_page.dart';
@@ -43,6 +44,11 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
       return MaterialPageRoute(
         settings: routesettings,
         builder: (_) => const UpdateImagePage(),
+      );
+    case StationsPage.routeName:
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => const StationsPage(),
       );
     default:
       return MaterialPageRoute(
