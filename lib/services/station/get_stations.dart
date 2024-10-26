@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:ev_charge/constants/error_handler.dart';
 import 'package:ev_charge/models/station.model.dart';
 import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
@@ -8,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class GetStations {
-  Future<List<dynamic>?> getAllStations(
-      {required BuildContext context}) async {
+  Future<List<dynamic>?> getAllStations({required BuildContext context}) async {
     try {
       http.Response res = await http.get(
         Uri.parse('$uri/api/v1/stations/get-all-stations'),
@@ -27,7 +24,7 @@ class GetStations {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getStationDetails(
+  Future<Station?> getStationDetails(
       {required BuildContext context, required String username}) async {
     try {
       http.Response stationRes = await http.get(
@@ -38,14 +35,7 @@ class GetStations {
         },
       );
 
-      if (context.mounted) {
-        errorHandler(
-          response: stationRes,
-          context: context,
-          onSuccess: () =>
-              Station.fromJson(jsonEncode(jsonDecode(stationRes.body)['data'])),
-        );
-      }
+      return Station.fromJson(jsonEncode(jsonDecode(stationRes.body)['data']));
     } catch (e) {
       if (context.mounted) {
         showSnackBar(context, 'Something went wrong while displaying stations');

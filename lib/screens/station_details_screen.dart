@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/models/station.model.dart';
 import 'package:ev_charge/services/station/get_stations.dart';
@@ -5,8 +6,8 @@ import 'package:flutter/material.dart';
 
 class StationDetailsScreen extends StatefulWidget {
   static const String routeName = '/station-details-screen';
-  // final String username;
-  const StationDetailsScreen({super.key});
+  final String username;
+  const StationDetailsScreen({super.key, required this.username});
 
   @override
   State<StationDetailsScreen> createState() => _StationDetailsScreenState();
@@ -32,17 +33,19 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    getStationDetails();
+    getStationDetails(widget.username);
   }
 
-  void getStationDetails() async {
+  void getStationDetails(String username) async {
     final stationDetails = await getStations.getStationDetails(
       context: context,
-      username: 'banepa_ev_station',
+      username: username,
     );
 
     if (stationDetails != null) {
-      station = Station.fromMap(stationDetails);
+      setState(() {
+        station = stationDetails;
+      });
     }
   }
 
@@ -57,8 +60,16 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
             SizedBox(
               height: 250,
               width: 500,
-              child: Image.asset(
-                'assets/images/ev_station.jpg',
+              child: CachedNetworkImage(
+                imageUrl: station.stationImage,
+                placeholder: (context, url) => SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(color: Colors.blue),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                height: 200,
+                width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),

@@ -1,6 +1,5 @@
 import 'package:ev_charge/screens/account_page.dart';
 import 'package:ev_charge/screens/booking_page.dart';
-import 'package:ev_charge/screens/station_details_screen.dart';
 import 'package:ev_charge/screens/stations_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
