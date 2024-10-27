@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/services/station/auth_service.dart';
+import 'package:ev_charge/services/station/get_stations.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,6 +23,10 @@ class _SignupStationState extends State<SignupStation> {
   final TextEditingController _usernameController = TextEditingController();
 
   final AuthService _authService = AuthService();
+  final GetStations getStations = GetStations();
+
+  List<Map<String, String>> stationsName = [];
+  Map<String, String>? selectedStation;
 
   XFile? panCardImage, stationImage;
 
@@ -46,6 +51,36 @@ class _SignupStationState extends State<SignupStation> {
       stationImage: stationImage!,
     );
   }
+
+  void getAllStations() async {
+    final allStations = await getStations.getAllStations(context: context);
+
+    if (allStations != null) {
+      for (int i = 0; i < allStations.length; i++) {
+        stationsName.add({
+          'name': allStations[i]['name'],
+          'username': allStations[i]['username'],
+          'location': allStations[i]['location'],
+        });
+      }
+      print(stationsName);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllStations();
+  }
+
+  void updateUsernameAndLocation() {
+    setState(() {
+      _usernameController.text = selectedStation!['username'] ?? '';
+      _locationController.text = selectedStation!['location'] ?? '';
+    });
+  }
+
+  //TODO: Override dispose everywhere
 
   @override
   Widget build(BuildContext context) {
@@ -100,17 +135,56 @@ class _SignupStationState extends State<SignupStation> {
                     ),
                     child: Column(
                       children: [
-                        CustomTextfield(
-                          labelText: 'Station Name',
-                          icon: Icons.business,
-                          controller: _stationNameController,
-                          obscureText: false,
+                        DropdownButtonFormField<Map<String, String>>(
+                          value: selectedStation,
+                          decoration: InputDecoration(
+                            labelText: 'Select a station',
+                            labelStyle: const TextStyle(
+                              color: Color.fromARGB(255, 145, 145, 145),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.business,
+                              color: const Color.fromARGB(255, 66, 197, 131),
+                            ),
+                          ),
+                          items:
+                              stationsName.map((Map<String, String> station) {
+                            print('*****************************************');
+                            print(station['name']);
+                            return DropdownMenuItem<Map<String, String>>(
+                              value: station,
+                              child: Text(station['name'] ?? ''),
+                            );
+                          }).toList(),
+                          onChanged: (Map<String, String>? value) {
+                            setState(() {
+                              selectedStation = value;
+                              updateUsernameAndLocation();
+                            });
+                          },
+                          validator: (value) => value == null
+                              ? 'Please select a station name.'
+                              : null,
                         ),
+                        const SizedBox(height: 20),
+                        // CustomTextfield(
+                        //   labelText: 'Station Name',
+                        //   icon: Icons.business,
+                        //   controller: _stationNameController,
+                        //   obscureText: false,
+                        // ),
                         CustomTextfield(
                           labelText: 'Username',
                           icon: Icons.person,
                           controller: _usernameController,
                           obscureText: false,
+                          readOnly: true,
                         ),
                         CustomTextfield(
                           labelText: 'Password',
@@ -129,6 +203,7 @@ class _SignupStationState extends State<SignupStation> {
                           icon: Icons.location_on,
                           controller: _locationController,
                           obscureText: false,
+                          readOnly: true,
                         ),
                         CustomTextfield(
                           labelText: 'Number of Slots',

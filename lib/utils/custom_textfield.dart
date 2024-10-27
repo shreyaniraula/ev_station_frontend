@@ -5,12 +5,14 @@ class CustomTextfield extends StatelessWidget {
   final bool obscureText;
   final TextEditingController controller;
   final IconData icon;
+  final bool readOnly;
   const CustomTextfield({
     super.key,
     this.labelText,
     required this.obscureText,
     required this.controller,
     required this.icon,
+    this.readOnly = false,
   });
 
   @override
