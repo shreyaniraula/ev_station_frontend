@@ -21,9 +21,10 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
         builder: (_) => const LoginPage(),
       );
     case StationDetailsScreen.routeName:
+      final args = routesettings.arguments as String;
       return MaterialPageRoute(
         settings: routesettings,
-        builder: (_) => const StationDetailsScreen(),
+        builder: (_) => StationDetailsScreen(username: args,),
       );
     case KhaltiScreen.routeName:
       return MaterialPageRoute(

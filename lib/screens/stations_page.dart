@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ev_charge/screens/station_details_screen.dart';
 import 'package:ev_charge/services/station/get_stations.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,9 @@ class _StationsPageState extends State<StationsPage> {
     final allStations = await getStations.getAllStations(context: context);
 
     if (allStations != null) {
-      stations = allStations;
+      setState(() {
+        stations = allStations;
+      });
     }
   }
 
@@ -37,13 +40,23 @@ class _StationsPageState extends State<StationsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(
-              imageUrl: stations[index]['stationImage'],
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () => Navigator.of(context).pushNamed(
+                StationDetailsScreen.routeName,
+                arguments: stations[index]['username'],
+              ),
+              child: CachedNetworkImage(
+                imageUrl: stations[index]['stationImage'],
+                placeholder: (context, url) => SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(color: Colors.blue),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             Text(
               stations[index]['name'],
