@@ -63,7 +63,6 @@ class _SignupStationState extends State<SignupStation> {
           'location': allStations[i]['location'],
         });
       }
-      print(stationsName);
     }
   }
 
@@ -81,6 +80,7 @@ class _SignupStationState extends State<SignupStation> {
   }
 
   //TODO: Override dispose everywhere
+  //TODO: Make reservation atomic
 
   @override
   Widget build(BuildContext context) {
@@ -155,8 +155,6 @@ class _SignupStationState extends State<SignupStation> {
                           ),
                           items:
                               stationsName.map((Map<String, String> station) {
-                            print('*****************************************');
-                            print(station['name']);
                             return DropdownMenuItem<Map<String, String>>(
                               value: station,
                               child: Text(station['name'] ?? ''),

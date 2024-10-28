@@ -1,11 +1,11 @@
-import 'package:ev_charge/screens/home_screen.dart';
-import 'package:ev_charge/screens/station_details_screen.dart';
-import 'package:ev_charge/screens/stations_page.dart';
-import 'package:ev_charge/screens/updates/update_image_page.dart';
-import 'package:ev_charge/screens/updates/update_password_page.dart';
-import 'package:ev_charge/screens/updates/update_user_details_page.dart';
-import 'package:ev_charge/screens/verification/login_page.dart';
-import 'package:ev_charge/screens/khalti_screen.dart';
+import 'package:ev_charge/screens/user/home_screen.dart';
+import 'package:ev_charge/screens/common/station_details_screen.dart';
+import 'package:ev_charge/screens/station/stations_page.dart';
+import 'package:ev_charge/screens/user/updates/update_image_page.dart';
+import 'package:ev_charge/screens/user/updates/update_password_page.dart';
+import 'package:ev_charge/screens/user/updates/update_user_details_page.dart';
+import 'package:ev_charge/screens/user/verification/login_page.dart';
+import 'package:ev_charge/screens/reservation/khalti_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings routesettings) {

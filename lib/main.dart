@@ -1,8 +1,8 @@
 import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/router.dart';
-import 'package:ev_charge/screens/home_screen.dart';
-import 'package:ev_charge/screens/verification/login_page.dart';
+import 'package:ev_charge/screens/user/home_screen.dart';
+import 'package:ev_charge/screens/user/verification/login_page.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
