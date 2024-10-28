@@ -22,6 +22,7 @@ class CustomTextfield extends StatelessWidget {
         TextField(
           controller: controller,
           obscureText: obscureText,
+          readOnly: readOnly,
           decoration: InputDecoration(
             prefixIcon:
                 Icon(icon, color: const Color.fromARGB(255, 66, 197, 131)),

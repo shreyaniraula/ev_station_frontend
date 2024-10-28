@@ -1,7 +1,7 @@
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/screens/main_page.dart';
-import 'package:ev_charge/screens/verification/signup_station.dart';
-import 'package:ev_charge/screens/verification/signup_user.dart';
+import 'package:ev_charge/screens/station/verification/signup_station.dart';
+import 'package:ev_charge/screens/user/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
 

@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ev_charge/screens/station_details_screen.dart';
+import 'package:ev_charge/screens/common/station_details_screen.dart';
 import 'package:ev_charge/services/station/get_stations.dart';
 import 'package:flutter/material.dart';
 

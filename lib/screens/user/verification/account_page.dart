@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ev_charge/providers/user_provider.dart';
-import 'package:ev_charge/screens/updates/update_image_page.dart';
-import 'package:ev_charge/screens/updates/update_password_page.dart';
-import 'package:ev_charge/screens/updates/update_user_details_page.dart';
+import 'package:ev_charge/screens/user/updates/update_image_page.dart';
+import 'package:ev_charge/screens/user/updates/update_password_page.dart';
+import 'package:ev_charge/screens/user/updates/update_user_details_page.dart';
 import 'package:ev_charge/services/station/get_stations.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/utils/custom_textbutton.dart';
