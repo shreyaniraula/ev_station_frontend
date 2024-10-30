@@ -1,11 +1,12 @@
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/services/reservation/add_reservation.dart';
+import 'package:ev_charge/services/user/payment_service.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
-import 'package:ev_charge/screens/reservation/khalti_screen.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 
 class BookingPage extends StatefulWidget {
+  static const String routeName = '/booking-page';
   const BookingPage({super.key});
 
   @override
@@ -22,6 +23,9 @@ class _BookingPageState extends State<BookingPage> {
   final _formKey = GlobalKey<FormState>();
 
   final ReservationService reservationService = ReservationService();
+  final PaymentService paymentService = PaymentService();
+
+  late double chargingDurationInHours;
 
   Future<void> _selectTime(
       BuildContext context, TextEditingController controller) async {
@@ -72,6 +76,11 @@ class _BookingPageState extends State<BookingPage> {
       return false;
     }
 
+    final Duration duration = endDateTime.difference(startDateTime);
+    chargingDurationInHours = duration.inMinutes / 60.0;
+    print('*****************************************');
+    print(chargingDurationInHours);
+
     return true;
   }
 
@@ -83,6 +92,13 @@ class _BookingPageState extends State<BookingPage> {
       endingTime: endTimeController.text,
       paymentAmount: '500',
       remarks: 'remarks',
+    );
+  }
+
+  void makePayment() {
+    paymentService.makePayment(
+      context: context,
+      duration: chargingDurationInHours,
     );
   }
 
@@ -119,13 +135,6 @@ class _BookingPageState extends State<BookingPage> {
                     ),
                   ),
                 ),
-
-                // CustomTextfield(
-                //   labelText: 'Arrival Time',
-                //   obscureText: false,
-                //   controller: arrivalTimeController,
-                //   icon: Icons.watch,
-                // ),
                 const SizedBox(height: 15),
                 GestureDetector(
                   onTap: () => _selectTime(context, endTimeController),
@@ -138,12 +147,6 @@ class _BookingPageState extends State<BookingPage> {
                     ),
                   ),
                 ),
-                // CustomTextfield(
-                //   labelText: 'Charging Duration',
-                //   obscureText: false,
-                //   controller: chargingDurationController,
-                //   icon: Icons.timelapse,
-                // ),
                 const SizedBox(height: 20),
                 const Text(
                   'Note: You would not get the refund of the payment and you are supposed to reach the charging station within 30 minutes of your booking. Otherwise, your booking might get cancelled.',
@@ -153,11 +156,8 @@ class _BookingPageState extends State<BookingPage> {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
-                    // if (_formKey.currentState!.validate()) {
-                    //   Navigator.of(context).pushNamed(KhaltiScreen.routeName);
-                    // }
                     if (validateTime()) {
-                      addReservation();
+                      makePayment();
                     }
                   },
                   style: elevatedButtonStyle,
