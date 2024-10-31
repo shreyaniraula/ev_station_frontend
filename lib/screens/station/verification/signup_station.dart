@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ev_charge/constants/ev_station_coordinates.dart';
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/services/station/auth_service.dart';
 import 'package:ev_charge/services/station/get_stations.dart';
@@ -52,17 +53,26 @@ class _SignupStationState extends State<SignupStation> {
     );
   }
 
-  void getAllStations() async {
-    final allStations = await getStations.getAllStations(context: context);
+  // void getAllStations() async {
+  //   final allStations = await getStations.getAllStations(context: context);
 
-    if (allStations != null) {
-      for (int i = 0; i < allStations.length; i++) {
-        stationsName.add({
-          'name': allStations[i]['name'],
-          'username': allStations[i]['username'],
-          'location': allStations[i]['location'],
-        });
-      }
+  //   if (allStations != null) {
+  //     for (int i = 0; i < allStations.length; i++) {
+  //       stationsName.add({
+  //         'name': allStations[i]['name'],
+  //         'username': allStations[i]['username'],
+  //         'location': allStations[i]['location'],
+  //       });
+  //     }
+  //   }
+  // }
+
+  void getAllStations() async {
+    for (int i = 0; i < evStationsCoordinates.length; i++) {
+      stationsName.add({
+        'name': evStationsCoordinates[i]['name'],
+        'address': evStationsCoordinates[i]['address'],
+      });
     }
   }
 
@@ -74,13 +84,18 @@ class _SignupStationState extends State<SignupStation> {
 
   void updateUsernameAndLocation() {
     setState(() {
-      _usernameController.text = selectedStation!['username'] ?? '';
-      _locationController.text = selectedStation!['location'] ?? '';
+      String formattedName =
+          selectedStation!['name']!.toLowerCase().replaceAll(' ', '_');
+      String formattedAddress =
+          selectedStation!['address']!.toLowerCase().replaceAll(' ', '_');
+      _usernameController.text = '${formattedName}_$formattedAddress';
+      _locationController.text = selectedStation!['address'] ?? '';
     });
   }
 
   //TODO: Override dispose everywhere
   //TODO: Make reservation atomic
+  //TODO: Complete add reservation
 
   @override
   Widget build(BuildContext context) {
@@ -144,9 +159,15 @@ class _SignupStationState extends State<SignupStation> {
                             ),
                             fillColor: Colors.white,
                             filled: true,
-                            border: OutlineInputBorder(
+                            enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: const BorderSide(color: Colors.white),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: const BorderSide(
+                                color: Color.fromRGBO(205, 221, 169, 0.651),
+                              ),
                             ),
                             prefixIcon: Icon(
                               Icons.business,
@@ -157,7 +178,15 @@ class _SignupStationState extends State<SignupStation> {
                               stationsName.map((Map<String, String> station) {
                             return DropdownMenuItem<Map<String, String>>(
                               value: station,
-                              child: Text(station['name'] ?? ''),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                // Adjust padding
+                                child: Text(
+                                  station['name'] ?? '',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ),
                             );
                           }).toList(),
                           onChanged: (Map<String, String>? value) {
