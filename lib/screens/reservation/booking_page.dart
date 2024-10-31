@@ -78,8 +78,6 @@ class _BookingPageState extends State<BookingPage> {
 
     final Duration duration = endDateTime.difference(startDateTime);
     chargingDurationInHours = duration.inMinutes / 60.0;
-    print('*****************************************');
-    print(chargingDurationInHours);
 
     return true;
   }

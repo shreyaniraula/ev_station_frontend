@@ -36,8 +36,6 @@ class ReservationService {
         }),
       );
 
-      print(res.body);
-
       if (context.mounted) {
         if (res.statusCode == 200) {
           showSnackBar(context, 'Booking successful!');
