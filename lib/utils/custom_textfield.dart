@@ -19,10 +19,16 @@ class CustomTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TextField(
+        TextFormField(
           controller: controller,
           obscureText: obscureText,
           readOnly: readOnly,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'This field is required.';
+            }
+            return null;
+          },
           decoration: InputDecoration(
             prefixIcon:
                 Icon(icon, color: const Color.fromARGB(255, 66, 197, 131)),

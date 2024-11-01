@@ -18,7 +18,7 @@ class _MapPageState extends State<MapPage> {
       Completer<GoogleMapController>();
 
   final Location _locationController = Location();
-  LatLng? _currentPosition;
+  LatLng? currentPosition;
   final Set<Marker> _markers = {};
 
   @override
@@ -72,7 +72,7 @@ class _MapPageState extends State<MapPage> {
       if (currentLocation.latitude != null &&
           currentLocation.longitude != null) {
         setState(() {
-          _currentPosition = LatLng(
+          currentPosition = LatLng(
             currentLocation.latitude!,
             currentLocation.longitude!,
           );

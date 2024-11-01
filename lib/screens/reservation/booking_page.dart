@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 
 class BookingPage extends StatefulWidget {
   static const String routeName = '/booking-page';
-  const BookingPage({super.key});
+  final String name, address, id;
+  const BookingPage(
+      {super.key, required this.name, required this.address, required this.id});
 
   @override
   State<BookingPage> createState() => _BookingPageState();
@@ -16,16 +18,18 @@ class BookingPage extends StatefulWidget {
 class _BookingPageState extends State<BookingPage> {
   final TextEditingController chargingStationController =
       TextEditingController();
+  final TextEditingController chargingStationLocationController =
+      TextEditingController();
   final TextEditingController startTimeController = TextEditingController();
   final TextEditingController endTimeController = TextEditingController();
-  // final TextEditingController arrivalTimeController = TextEditingController();
-  // final TextEditingController chargingDurationController = TextEditingController();
+  final TextEditingController remarksController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   final ReservationService reservationService = ReservationService();
   final PaymentService paymentService = PaymentService();
 
   late double chargingDurationInHours;
+  late int amount;
 
   Future<void> _selectTime(
       BuildContext context, TextEditingController controller) async {
@@ -78,6 +82,7 @@ class _BookingPageState extends State<BookingPage> {
 
     final Duration duration = endDateTime.difference(startDateTime);
     chargingDurationInHours = duration.inMinutes / 60.0;
+    amount = (chargingDurationInHours * 250 * 100).toInt();
 
     return true;
   }
@@ -85,11 +90,11 @@ class _BookingPageState extends State<BookingPage> {
   void addReservation() {
     reservationService.bookStation(
       context: context,
-      stationId: '671ba28ae9e964cd9b37a1c3',
+      stationId: widget.id,
       startingTime: startTimeController.text,
       endingTime: endTimeController.text,
-      paymentAmount: '500',
-      remarks: 'remarks',
+      paymentAmount: amount.toString(),
+      remarks: remarksController.text,
     );
   }
 
@@ -97,11 +102,15 @@ class _BookingPageState extends State<BookingPage> {
     paymentService.makePayment(
       context: context,
       duration: chargingDurationInHours,
+      onSuccess: addReservation,
+      amount: amount,
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    chargingStationController.text = widget.name;
+    chargingStationLocationController.text = widget.address;
     return Scaffold(
       body: DecoratedBox(
         decoration: BoxDecoration(
@@ -120,6 +129,14 @@ class _BookingPageState extends State<BookingPage> {
                   obscureText: false,
                   controller: chargingStationController,
                   icon: Icons.business,
+                  readOnly: true,
+                ),
+                CustomTextfield(
+                  labelText: 'Charging Station Location',
+                  obscureText: false,
+                  controller: chargingStationLocationController,
+                  icon: Icons.location_on,
+                  readOnly: true,
                 ),
                 const SizedBox(height: 15),
                 GestureDetector(
@@ -145,6 +162,13 @@ class _BookingPageState extends State<BookingPage> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 15),
+                CustomTextfield(
+                  labelText: 'Remarks',
+                  obscureText: false,
+                  controller: remarksController,
+                  icon: Icons.note,
+                ),
                 const SizedBox(height: 20),
                 const Text(
                   'Note: You would not get the refund of the payment and you are supposed to reach the charging station within 30 minutes of your booking. Otherwise, your booking might get cancelled.',
@@ -154,8 +178,10 @@ class _BookingPageState extends State<BookingPage> {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
-                    if (validateTime()) {
-                      makePayment();
+                    if (_formKey.currentState!.validate()) {
+                      if (validateTime()) {
+                        makePayment();
+                      }
                     }
                   },
                   style: elevatedButtonStyle,
