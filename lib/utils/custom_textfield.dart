@@ -6,6 +6,7 @@ class CustomTextfield extends StatelessWidget {
   final TextEditingController controller;
   final IconData icon;
   final bool readOnly;
+
   const CustomTextfield({
     super.key,
     this.labelText,

@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/constants/ev_station_coordinates.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:http/http.dart' as http;
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -20,6 +24,7 @@ class _MapPageState extends State<MapPage> {
   final Location _locationController = Location();
   LatLng? currentPosition;
   final Set<Marker> _markers = {};
+  List<LatLng> _routeCoordinates = [];
 
   @override
   void initState() {
@@ -42,8 +47,19 @@ class _MapPageState extends State<MapPage> {
               target: _initialPosition,
               zoom: 13.0,
             ),
-            onMapCreated: ((GoogleMapController controller) =>
-                _mapController.complete(controller)),
+            onMapCreated: ((GoogleMapController controller) {
+              _mapController.complete(controller);
+              _moveCameraToCurrentPosition();
+            }),
+          ),
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: FloatingActionButton(
+              onPressed: findNearestEVStation,
+              tooltip: 'Find Nearest EV Station',
+              child: const Icon(Icons.local_car_wash),
+            ),
           ),
         ],
       ),
@@ -83,16 +99,170 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> displayMarkers() async {
-    for (var data in evStationsCoordinates) {
+    _markers.clear();
+    // Add user's location marker
+    if (currentPosition != null) {
       _markers.add(Marker(
-        markerId: const MarkerId('_destinationMarker'),
-        position: LatLng(data['latitude'], data['longitude']),
-        icon: await BitmapDescriptor.asset(
-          const ImageConfiguration(size: Size(60, 60)),
-          'assets/images/charging_station.png',
-        ),
-        infoWindow: InfoWindow(title: data['name']),
+        markerId: const MarkerId('user_location'),
+        position: currentPosition!,
+        infoWindow: const InfoWindow(title: 'My location'),
       ));
     }
+    for (var data in evStationsCoordinates) {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(data['name']),
+          position: LatLng(data['latitude'], data['longitude']),
+          icon: await BitmapDescriptor.asset(
+            const ImageConfiguration(size: Size(20, 20)),
+            'assets/images/charging_station.png',
+          ),
+          infoWindow: InfoWindow(title: data['name']),
+        ),
+      );
+    }
+  }
+
+  Future<void> _moveCameraToCurrentPosition() async {
+    final controller = await _mapController.future;
+    if (currentPosition != null) {
+      controller.animateCamera(CameraUpdate.newLatLng(currentPosition!));
+    }
+  }
+
+  Future<void> findNearestEVStation() async {
+    if (currentPosition == null) return;
+
+    double nearestDistance = double.infinity;
+    Map<String, dynamic>? nearestStation;
+
+    for (var station in evStationsCoordinates) {
+      LatLng stationLocation =
+          LatLng(station['latitude'], station['longitude']);
+      double distance = await getDistance(currentPosition!, stationLocation);
+
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestStation = station; // Store the nearest station
+      }
+    }
+
+    if (nearestStation != null) {
+      // Add the nearest station marker
+      _markers.add(Marker(
+        markerId: const MarkerId('nearest_station'),
+        position:
+            LatLng(nearestStation['latitude'], nearestStation['longitude']),
+        icon: await BitmapDescriptor.asset(
+          const ImageConfiguration(size: Size(20, 20)),
+          'assets/images/charging_station.png',
+        ),
+        infoWindow: InfoWindow(
+          title: nearestStation['name'],
+          snippet: '${(nearestDistance / 1000).toStringAsFixed(2)} km away',
+        ),
+      ));
+
+      // Show distance and duration
+      final distanceAndDuration = await getDistanceAndDuration(currentPosition!,
+          LatLng(nearestStation['latitude'], nearestStation['longitude']));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+            'Nearest EV Station: ${nearestStation['name']} (${(nearestDistance / 1000).toStringAsFixed(2)} km away, ${distanceAndDuration['duration']})'),
+      ));
+
+      setState(() {});
+      getRouteToStation(currentPosition!, nearestStation);
+    }
+  }
+
+  Future<Map<String, dynamic>> getDistanceAndDuration(
+      LatLng start, LatLng end) async {
+    final response = await http.get(
+      Uri.parse(
+        'https://maps.gomaps.pro/maps/api/directions/json?origin=${start.latitude},${start.longitude}&destination=${end.latitude},${end.longitude}&key=$kGoMapsProApiKey',
+      ),
+    );
+
+    // print(response.body);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['status'] == 'OK') {
+        // Extract distance and duration from the response
+        String distanceText = data['routes'][0]['legs'][0]['distance']['text'];
+        String durationText = data['routes'][0]['legs'][0]['duration']['text'];
+        return {
+          'distance': distanceText,
+          'duration': durationText,
+        };
+      } else {
+        throw Exception('Failed to calculate distance: ${data['status']}');
+      }
+    } else {
+      throw Exception('Failed to load directions');
+    }
+  }
+
+  Future<void> getRouteToStation(
+      LatLng start, Map<String, dynamic> station) async {
+    final String url =
+        'https://maps.gomaps.pro/maps/api/directions/json?origin=${start.latitude},${start.longitude}&destination=${station['latitude']},${station['longitude']}&key=$kGoMapsProApiKey';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      if (data['routes'].isNotEmpty) {
+        print(data['routes'][0]);
+        String points = data['routes'][0]['polyline']['points'];
+        _routeCoordinates = decodePolyline(points);
+        setState(() {}); // Update the map with the new polyline
+      }
+    } else {
+      throw Exception('Failed to load directions');
+    }
+  }
+
+  List<LatLng> decodePolyline(String poly) {
+    List<LatLng> result = [];
+    int index = 0, len = poly.length;
+    int lat = 0, lng = 0;
+
+    while (index < len) {
+      int b, shift = 0, resultLat = 0;
+      do {
+        b = poly.codeUnitAt(index++) - 63;
+        resultLat |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlat = ((resultLat & 1) != 0 ? ~(resultLat >> 1) : (resultLat >> 1));
+      lat += dlat;
+
+      shift = 0;
+      int resultLng = 0;
+      do {
+        b = poly.codeUnitAt(index++) - 63;
+        resultLng |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlng = ((resultLng & 1) != 0 ? ~(resultLng >> 1) : (resultLng >> 1));
+      lng += dlng;
+
+      LatLng p = LatLng(lat / 1E5, lng / 1E5);
+      result.add(p);
+    }
+
+    return result;
+  }
+
+  Future<double> getDistance(LatLng start, LatLng end) async {
+    return Geolocator.distanceBetween(
+      start.latitude,
+      start.longitude,
+      end.latitude,
+      end.longitude,
+    );
   }
 }

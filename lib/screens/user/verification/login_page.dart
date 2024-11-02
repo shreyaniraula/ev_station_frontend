@@ -139,10 +139,6 @@ class _LoginPageState extends State<LoginPage> {
                           if (isSelected[0]) {
                             // Authenticate user
                             loginUser();
-                            // Navigator.of(context).pushNamedAndRemoveUntil(
-                            //   HomeScreen.routeName,
-                            //   (route) => false,
-                            // );
                           } else {
                             Navigator.push(
                               context,
