@@ -24,7 +24,8 @@ class _MapPageState extends State<MapPage> {
   final Location _locationController = Location();
   LatLng? currentPosition;
   final Set<Marker> _markers = {};
-  List<LatLng> _routeCoordinates = [];
+  final List<LatLng> _routeCoordinates = [];
+  final Set<Polyline> _polylines = {};
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _MapPageState extends State<MapPage> {
         children: [
           GoogleMap(
             markers: _markers,
+            polylines: _polylines,
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
             initialCameraPosition: const CameraPosition(
@@ -94,6 +96,7 @@ class _MapPageState extends State<MapPage> {
           );
           displayMarkers();
         });
+        _moveCameraToCurrentPosition();
       }
     });
   }
@@ -212,16 +215,29 @@ class _MapPageState extends State<MapPage> {
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
+      final data = jsonDecode(response.body);
 
       if (data['routes'].isNotEmpty) {
-        print(data['routes'][0]);
-        String points = data['routes'][0]['polyline']['points'];
-        _routeCoordinates = decodePolyline(points);
-        setState(() {}); // Update the map with the new polyline
+        // Get steps and decode each step polyline
+        List<LatLng> routePoints = [];
+        for (var step in data['routes'][0]['legs'][0]['steps']) {
+          String polyline = step['polyline']['points'];
+          routePoints.addAll(decodePolyline(polyline));
+        }
+
+        // Add the polyline to the map
+        setState(() {
+          _polylines.clear(); // Clear any existing route
+          _polylines.add(
+            Polyline(
+              polylineId: PolylineId('route'),
+              color: Colors.blue, // Choose your desired color
+              width: 5, // Width of the route line
+              points: routePoints,
+            ),
+          );
+        });
       }
-    } else {
-      throw Exception('Failed to load directions');
     }
   }
 
