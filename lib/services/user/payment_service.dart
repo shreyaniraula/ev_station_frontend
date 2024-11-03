@@ -14,9 +14,11 @@ class PaymentService {
   void makePayment({
     required BuildContext context,
     required double duration,
+    required int amount,
+    required Function() onSuccess,
   }) {
     String productIdentity = generateUniqueProductIdentity();
-    int amount = (duration * 250 * 100).toInt(); // Convert to paisa
+     // Convert to paisa
 
     KhaltiScope.of(context).pay(
       config: PaymentConfig(
@@ -28,7 +30,7 @@ class PaymentService {
         PaymentPreference.khalti,
       ],
       onSuccess: (successModel) {
-        showSnackBar(context, 'Payment Successful!');
+        showSnackBar(context, 'Payment Successful, Station reserved');
         Navigator.of(context).pushNamed(HomeScreen.routeName);
       },
       onFailure: (failureModel) {

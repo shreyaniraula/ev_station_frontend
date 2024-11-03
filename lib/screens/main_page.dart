@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {

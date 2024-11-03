@@ -53,20 +53,6 @@ class _SignupStationState extends State<SignupStation> {
     );
   }
 
-  // void getAllStations() async {
-  //   final allStations = await getStations.getAllStations(context: context);
-
-  //   if (allStations != null) {
-  //     for (int i = 0; i < allStations.length; i++) {
-  //       stationsName.add({
-  //         'name': allStations[i]['name'],
-  //         'username': allStations[i]['username'],
-  //         'location': allStations[i]['location'],
-  //       });
-  //     }
-  //   }
-  // }
-
   void getAllStations() async {
     for (int i = 0; i < evStationsCoordinates.length; i++) {
       stationsName.add({
@@ -82,6 +68,17 @@ class _SignupStationState extends State<SignupStation> {
     getAllStations();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _stationNameController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    _locationController.dispose();
+    _slotsController.dispose();
+    _usernameController.dispose();
+  }
+
   void updateUsernameAndLocation() {
     setState(() {
       String formattedName =
@@ -95,7 +92,6 @@ class _SignupStationState extends State<SignupStation> {
 
   //TODO: Override dispose everywhere
   //TODO: Make reservation atomic
-  //TODO: Complete add reservation
 
   @override
   Widget build(BuildContext context) {

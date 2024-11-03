@@ -1,5 +1,5 @@
+import 'package:ev_charge/screens/user/map_page.dart';
 import 'package:ev_charge/screens/user/verification/account_page.dart';
-import 'package:ev_charge/screens/reservation/booking_page.dart';
 import 'package:ev_charge/screens/station/stations_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.money_dollar),
-            label: 'Booking',
+            icon: Icon(CupertinoIcons.battery_charging),
+            label: 'Stations',
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.person_circle),
@@ -48,9 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: index == 0
-          ? StationsPage()
+          ? MapPage()
           : index == 1
-              ? const BookingPage()
+              ? const StationsPage()
               : const AccountPage(),
     );
   }

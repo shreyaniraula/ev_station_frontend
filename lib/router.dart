@@ -1,3 +1,4 @@
+import 'package:ev_charge/screens/reservation/booking_page.dart';
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/screens/common/station_details_screen.dart';
 import 'package:ev_charge/screens/station/stations_page.dart';
@@ -24,7 +25,9 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
       final args = routesettings.arguments as String;
       return MaterialPageRoute(
         settings: routesettings,
-        builder: (_) => StationDetailsScreen(username: args,),
+        builder: (_) => StationDetailsScreen(
+          username: args,
+        ),
       );
     case KhaltiScreen.routeName:
       return MaterialPageRoute(
@@ -50,6 +53,14 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
       return MaterialPageRoute(
         settings: routesettings,
         builder: (_) => const StationsPage(),
+      );
+    case BookingPage.routeName:
+      final args = routesettings.arguments as BookingPage;
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => BookingPage(
+          name: args.name, id: args.id, address: args.address,
+        ),
       );
     default:
       return MaterialPageRoute(
