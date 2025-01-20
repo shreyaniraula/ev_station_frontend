@@ -23,7 +23,7 @@ class _SignupStationState extends State<SignupStation> {
   final TextEditingController _slotsController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
 
-  final AuthService _authService = AuthService();
+  final StationAuthService _authService = StationAuthService();
   final GetStations getStations = GetStations();
 
   List<Map<String, String>> stationsName = [];

@@ -17,7 +17,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  final AuthService authService = AuthService();
+  final UserAuthService authService = UserAuthService();
   final GetStations getStations = GetStations();
 
   String greeting() {

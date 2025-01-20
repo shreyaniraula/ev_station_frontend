@@ -1,8 +1,9 @@
 import 'package:ev_charge/constants/styling_variables.dart';
-import 'package:ev_charge/screens/main_page.dart';
+import 'package:ev_charge/screens/station/home_screen.dart';
 import 'package:ev_charge/screens/station/verification/signup_station.dart';
 import 'package:ev_charge/screens/user/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
+import 'package:ev_charge/services/station/auth_service.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   List<bool> isSelected = [true, false];
 
-  final AuthService _authService = AuthService();
+  final UserAuthService _userAuthService = UserAuthService();
+  final StationAuthService _stationAuthService = StationAuthService();
 
   @override
   void dispose() {
@@ -30,7 +32,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void loginUser() {
-    _authService.loginUser(
+    _userAuthService.loginUser(
+      context: context,
+      username: _usernameController.text,
+      password: _passwordController.text,
+    );
+  }
+
+  void loginStation() {
+    _stationAuthService.loginStation(
       context: context,
       username: _usernameController.text,
       password: _passwordController.text,
@@ -137,15 +147,9 @@ class _LoginPageState extends State<LoginPage> {
                       ElevatedButton(
                         onPressed: () {
                           if (isSelected[0]) {
-                            // Authenticate user
                             loginUser();
                           } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainPage(),
-                              ),
-                            );
+                            loginStation();
                           }
                         },
                         style: elevatedButtonStyle,

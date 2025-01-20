@@ -31,7 +31,9 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     getUserLocation().then((response) {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -89,13 +91,15 @@ class _MapPageState extends State<MapPage> {
         .listen((LocationData currentLocation) {
       if (currentLocation.latitude != null &&
           currentLocation.longitude != null) {
-        setState(() {
-          currentPosition = LatLng(
-            currentLocation.latitude!,
-            currentLocation.longitude!,
-          );
-          displayMarkers();
-        });
+        if (mounted) {
+          setState(() {
+            currentPosition = LatLng(
+              currentLocation.latitude!,
+              currentLocation.longitude!,
+            );
+            displayMarkers();
+          });
+        }
         _moveCameraToCurrentPosition();
       }
     });
@@ -111,18 +115,23 @@ class _MapPageState extends State<MapPage> {
         infoWindow: const InfoWindow(title: 'My location'),
       ));
     }
+
+    final stationIcon = await BitmapDescriptor.asset(
+      const ImageConfiguration(size: Size(20, 20)),
+      'assets/images/charging_station.png',
+    );
     for (var data in evStationsCoordinates) {
       _markers.add(
         Marker(
           markerId: MarkerId(data['name']),
           position: LatLng(data['latitude'], data['longitude']),
-          icon: await BitmapDescriptor.asset(
-            const ImageConfiguration(size: Size(20, 20)),
-            'assets/images/charging_station.png',
-          ),
+          icon: stationIcon,
           infoWindow: InfoWindow(title: data['name']),
         ),
       );
+    }
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -174,7 +183,9 @@ class _MapPageState extends State<MapPage> {
             'Nearest EV Station: ${nearestStation['name']} (${(nearestDistance / 1000).toStringAsFixed(2)} km away, ${distanceAndDuration['duration']})'),
       ));
 
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
       getRouteToStation(currentPosition!, nearestStation);
     }
   }
@@ -187,7 +198,7 @@ class _MapPageState extends State<MapPage> {
       ),
     );
 
-    // print(response.body);
+    print(response.body);
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -226,17 +237,19 @@ class _MapPageState extends State<MapPage> {
         }
 
         // Add the polyline to the map
-        setState(() {
-          _polylines.clear(); // Clear any existing route
-          _polylines.add(
-            Polyline(
-              polylineId: PolylineId('route'),
-              color: Colors.blue, // Choose your desired color
-              width: 5, // Width of the route line
-              points: routePoints,
-            ),
-          );
-        });
+        if (mounted) {
+          setState(() {
+            _polylines.clear(); // Clear any existing route
+            _polylines.add(
+              Polyline(
+                polylineId: PolylineId('route'),
+                color: Colors.blue, // Choose your desired color
+                width: 5, // Width of the route line
+                points: routePoints,
+              ),
+            );
+          });
+        }
       }
     }
   }

@@ -18,7 +18,7 @@ class PaymentService {
     required Function() onSuccess,
   }) {
     String productIdentity = generateUniqueProductIdentity();
-     // Convert to paisa
+    // Convert to paisa
 
     KhaltiScope.of(context).pay(
       config: PaymentConfig(
@@ -31,7 +31,7 @@ class PaymentService {
       ],
       onSuccess: (successModel) {
         showSnackBar(context, 'Payment Successful, Station reserved');
-        Navigator.of(context).pushNamed(HomeScreen.routeName);
+        Navigator.of(context).pushNamed(UserHomeScreen.routeName);
       },
       onFailure: (failureModel) {
         showSnackBar(context, 'Payment Failed. Try again.');

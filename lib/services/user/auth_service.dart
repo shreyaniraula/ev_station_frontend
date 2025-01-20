@@ -14,7 +14,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthService {
+class UserAuthService {
   Future<void> registerUser({
     required BuildContext context,
     required String username,
@@ -106,7 +106,7 @@ class AuthService {
 
             if (context.mounted) {
               Navigator.of(context).pushNamed(
-                HomeScreen.routeName,
+                UserHomeScreen.routeName,
               );
             }
           },
