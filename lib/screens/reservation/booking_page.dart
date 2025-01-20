@@ -1,5 +1,6 @@
 import 'package:ev_charge/constants/styling_variables.dart';
-import 'package:ev_charge/services/reservation/add_reservation.dart';
+import 'package:ev_charge/screens/user/home_screen.dart';
+import 'package:ev_charge/services/reservation/reservation_service.dart';
 import 'package:ev_charge/services/user/payment_service.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
@@ -180,7 +181,10 @@ class _BookingPageState extends State<BookingPage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       if (validateTime()) {
-                        makePayment();
+                        // makePayment();
+                        addReservation();
+                        Navigator.of(context)
+                            .pushNamed(UserHomeScreen.routeName);
                       }
                     }
                   },

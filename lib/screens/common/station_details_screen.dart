@@ -26,6 +26,7 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
     location: '',
     panCard: '',
     stationImage: '',
+    accessToken: '',
     noOfSlots: 0,
     reservedSlots: 0,
     isVerified: false,

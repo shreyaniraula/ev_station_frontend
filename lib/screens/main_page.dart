@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
+  static const String routeName = 'main-page';
   const MainPage({super.key});
 
   @override

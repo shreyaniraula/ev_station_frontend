@@ -4,29 +4,33 @@ import 'package:ev_charge/screens/station/stations_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
+class UserHomeScreen extends StatefulWidget {
   static const String routeName = '/home-screen';
-  const HomeScreen({super.key});
+  const UserHomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<UserHomeScreen> createState() => _UserHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _UserHomeScreenState extends State<UserHomeScreen> {
   int index = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: index == 0 ? const Text('Nearby Stations'): const Text('Book Station'),
+        title: index == 0
+            ? const Text('Nearby Stations')
+            : const Text('Book Station'),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
         onTap: (value) {
-          setState(() {
-            index = value;
-          });
+          if (mounted) {
+            setState(() {
+              index = value;
+            });
+          }
         },
         backgroundColor: const Color.fromARGB(255, 196, 231, 167),
         selectedItemColor: const Color.fromARGB(

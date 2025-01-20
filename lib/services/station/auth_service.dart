@@ -3,14 +3,19 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/constants/error_handler.dart';
 import 'package:ev_charge/models/station.model.dart';
+import 'package:ev_charge/providers/station_provider.dart';
+import 'package:ev_charge/screens/main_page.dart';
+import 'package:ev_charge/screens/station/home_screen.dart';
 import 'package:ev_charge/screens/user/verification/login_page.dart';
 import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthService {
+class StationAuthService {
   Future<void> registerStation({
     required BuildContext context,
     required String stationName,
@@ -45,6 +50,7 @@ class AuthService {
         location: location,
         panCard: panCardImageUrl,
         stationImage: stationImageUrl,
+        accessToken: '',
         noOfSlots: noOfSlots,
         reservedSlots: 0,
         isVerified: false,
@@ -105,7 +111,18 @@ class AuthService {
           response: res,
           context: context,
           onSuccess: () async {
-            showSnackBar(context, 'Station logged in.');
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            if (context.mounted) {
+              Provider.of<StationProvider>(context, listen: false)
+                  .setStation(jsonEncode(jsonDecode(res.body)['data']));
+            }
+
+            await prefs.setString(
+                'x-auth-token', jsonDecode(res.body)['data']['accessToken']);
+
+            if (context.mounted) {
+              Navigator.pushNamed(context, MainPage.routeName);
+            }
           },
         );
       }

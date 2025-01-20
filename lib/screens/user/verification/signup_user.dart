@@ -19,7 +19,7 @@ class _SignupUserState extends State<SignupUser> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
 
-  final AuthService _authService = AuthService();
+  final UserAuthService _authService = UserAuthService();
 
   XFile? _image;
 

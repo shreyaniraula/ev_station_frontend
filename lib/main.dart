@@ -1,6 +1,8 @@
 import 'package:ev_charge/constants/api_key.dart';
+import 'package:ev_charge/providers/station_provider.dart';
 import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/router.dart';
+import 'package:ev_charge/screens/station/home_screen.dart';
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/screens/user/verification/login_page.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
@@ -11,7 +13,10 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => StationProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -25,12 +30,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final AuthService authService = AuthService();
+  final UserAuthService userAuthService = UserAuthService();
 
   @override
   void initState() {
     super.initState();
-    authService.getUserData(context);
+    userAuthService.getUserData(context);
   }
 
   @override
@@ -50,8 +55,13 @@ class _MyAppState extends State<MyApp> {
             home:
                 //const HomeScreen(),
                 Provider.of<UserProvider>(context).user.accessToken.isNotEmpty
-                    ? const HomeScreen()
-                    : const LoginPage(),
+                    ? const UserHomeScreen()
+                    : Provider.of<StationProvider>(context)
+                            .station
+                            .accessToken
+                            .isNotEmpty
+                        ? const StationHomeScreen()
+                        : const LoginPage(),
           );
         });
   }

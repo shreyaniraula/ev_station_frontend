@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class Reservation {
+  final String id;
   final String reservedBy;
   final String reservedTo;
   final String paymentAmount;
@@ -9,6 +10,7 @@ class Reservation {
   final String remarks;
 
   Reservation({
+    required this.id,
     required this.reservedBy,
     required this.reservedTo,
     required this.paymentAmount,
@@ -19,6 +21,7 @@ class Reservation {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'reservedBy': reservedBy,
       'reservedTo': reservedTo,
       'paymentAmount': paymentAmount,
@@ -30,6 +33,7 @@ class Reservation {
 
   factory Reservation.fromMap(Map<String, dynamic> map) {
     return Reservation(
+      id: map['id'] ?? '',
       reservedBy: map['reservedBy'] ?? '',
       reservedTo: map['reservedTo'] ?? '',
       paymentAmount: map['paymentAmount'] ?? '',
@@ -41,5 +45,6 @@ class Reservation {
 
   String toJson() => json.encode(toMap());
 
-  factory Reservation.fromJson(String source) => Reservation.fromMap(json.decode(source));
+  factory Reservation.fromJson(String source) =>
+      Reservation.fromMap(json.decode(source));
 }

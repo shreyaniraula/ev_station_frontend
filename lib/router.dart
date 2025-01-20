@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings routesettings) {
   switch (routesettings.name) {
-    case HomeScreen.routeName:
+    case UserHomeScreen.routeName:
       return MaterialPageRoute(
         settings: routesettings,
-        builder: (_) => const HomeScreen(),
+        builder: (_) => const UserHomeScreen(),
       );
     case LoginPage.routeName:
       return MaterialPageRoute(
@@ -59,7 +59,9 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
       return MaterialPageRoute(
         settings: routesettings,
         builder: (_) => BookingPage(
-          name: args.name, id: args.id, address: args.address,
+          name: args.name,
+          id: args.id,
+          address: args.address,
         ),
       );
     default:
