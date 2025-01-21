@@ -37,7 +37,6 @@ class ReservationService {
           'remarks': remarks,
         }),
       );
-      print(res.body);
 
       if (context.mounted) {
         if (res.statusCode == 200) {

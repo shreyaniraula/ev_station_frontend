@@ -1,11 +1,13 @@
-import 'package:ev_charge/models/reservation.model.dart';
-import 'package:ev_charge/services/reservation/reservation_service.dart';
+import 'package:ev_charge/providers/station_provider.dart';
+import 'package:ev_charge/screens/reservation/booking_page.dart';
+import 'package:ev_charge/screens/station/reservation_screen.dart';
+import 'package:ev_charge/screens/user/verification/account_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class StationHomeScreen extends StatefulWidget {
-  static const String routeName = '/home-screen';
-
+  static const String routeName = '/station-home-screen';
   const StationHomeScreen({super.key});
 
   @override
@@ -13,167 +15,51 @@ class StationHomeScreen extends StatefulWidget {
 }
 
 class _StationHomeScreenState extends State<StationHomeScreen> {
-  bool _isLoading = true;
-  String? _error;
-
-  final ReservationService reservationService = ReservationService();
-  List<Reservation> _reservations = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchReservations();
-  }
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
+    final station = Provider.of<StationProvider>(context).station;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reservations'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _fetchReservations,
+        title: index == 0
+            ? const Text('Reservations')
+            : const Text('Add Reservation'),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: index,
+        onTap: (value) {
+          if (mounted) {
+            setState(() {
+              index = value;
+            });
+          }
+        },
+        backgroundColor: const Color.fromARGB(255, 196, 231, 167),
+        selectedItemColor: const Color.fromARGB(
+            169, 9, 14, 0), // Customize selected item color
+        unselectedItemColor: Colors.grey, // Customize unselected item color
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.home),
+            label: 'Reservations',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.add_circled_solid),
+            label: 'Add Reservation',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.person_circle),
+            label: 'Account',
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _fetchReservations,
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _error != null
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Error: $_error',
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: _fetchReservations,
-                          child: const Text('Retry'),
-                        ),
-                      ],
-                    ),
-                  )
-                : _reservations.isEmpty
-                    ? const Center(
-                        child: Text('No upcoming reservations'),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: _reservations.length,
-                        itemBuilder: (context, index) {
-                          final reservation = _reservations[index];
-                          return Card(
-                            elevation: 2,
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Booking #${reservation.id}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.calendar_today,
-                                          size: 16, color: Colors.grey),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        reservation.startingTime,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      const Icon(Icons.access_time,
-                                          size: 16, color: Colors.grey),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        reservation.endingTime,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.person,
-                                          size: 16, color: Colors.grey),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        reservation.reservedBy,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          // Navigate to booking details
-                                        },
-                                        child: const Text('View Details'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-      ),
+      body: index == 0
+          ? ReservationScreen()
+          : index == 1
+              ? BookingPage(name: station.name, address: station.location, id: station.id)
+              : const AccountPage(),
     );
-  }
-
-  Future<void> _fetchReservations() async {
-    if (mounted) {
-      setState(() {
-        _isLoading = true;
-        _error = null;
-      });
-    }
-
-    try {
-      final bookings = await reservationService.getReservations();
-      print(bookings);
-      if (mounted) {
-        setState(() {
-          _reservations = bookings;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _error = e.toString();
-          _isLoading = false;
-        });
-      }
-    }
   }
 }

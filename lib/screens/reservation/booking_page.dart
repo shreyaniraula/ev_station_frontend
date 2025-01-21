@@ -1,5 +1,4 @@
 import 'package:ev_charge/constants/styling_variables.dart';
-import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/services/reservation/reservation_service.dart';
 import 'package:ev_charge/services/user/payment_service.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
@@ -183,14 +182,17 @@ class _BookingPageState extends State<BookingPage> {
                       if (validateTime()) {
                         // makePayment();
                         addReservation();
-                        Navigator.of(context)
-                            .pushNamed(UserHomeScreen.routeName);
+                        startTimeController.clear();
+                        endTimeController.clear();
+                        remarksController.clear();
+                        // Navigator.of(context)
+                        //     .pushNamed(UserHomeScreen.routeName);
                       }
                     }
                   },
                   style: elevatedButtonStyle,
                   child: const Text(
-                    'Book with Khalti',
+                    'Book Station',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white,
