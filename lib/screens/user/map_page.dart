@@ -198,8 +198,6 @@ class _MapPageState extends State<MapPage> {
       ),
     );
 
-    print(response.body);
-
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['status'] == 'OK') {

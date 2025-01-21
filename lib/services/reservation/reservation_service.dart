@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:ev_charge/models/reservation.model.dart';
 import 'package:ev_charge/uri.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
@@ -18,17 +17,17 @@ class ReservationService {
   }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String? token = prefs.getString('user-auth-token');
 
       if (token == null) {
-        prefs.setString('x-auth-token', '');
+        prefs.setString('user-auth-token', '');
       }
 
       final res = await http.post(
         Uri.parse('$uri/api/v1/reserve/reserve-station/$stationId'),
         headers: {
           'Content-Type': 'application/json',
-          'x-auth-token': token!,
+          'user-auth-token': token!,
         },
         body: jsonEncode({
           'paymentAmount': paymentAmount,
@@ -54,29 +53,26 @@ class ReservationService {
 
   Future<List<Reservation>> getReservations() async {
     try {
-      print('#####################################');
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String? token = prefs.getString('station-auth-token');
 
       if (token == null) {
-        prefs.setString('x-auth-token', '');
+        prefs.setString('station-auth-token', '');
       }
 
       final res = await http.get(
         Uri.parse('$uri/api/v1/reserve/view-reservation'),
         headers: {
           'Content-Type': 'application/json',
-          'x-auth-token': token!,
+          'station-auth-token': token!,
         },
       );
 
       if (res.statusCode == 200) {
         List<Reservation> reservations = [];
         final List<dynamic> responseData = jsonDecode(res.body)['data'];
-        print(responseData);
 
         for (var item in responseData) {
-          print(item);
           reservations.add(
             Reservation(
               id: item['_id'],

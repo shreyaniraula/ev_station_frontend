@@ -116,8 +116,8 @@ class StationAuthService {
                   .setStation(jsonEncode(jsonDecode(res.body)['data']));
             }
 
-            await prefs.setString(
-                'x-auth-token', jsonDecode(res.body)['data']['accessToken']);
+            await prefs.setString('station-auth-token',
+                jsonDecode(res.body)['data']['accessToken']);
 
             if (context.mounted) {
               Navigator.pushNamed(context, StationHomeScreen.routeName);
@@ -135,17 +135,17 @@ class StationAuthService {
   void getStationData(BuildContext context) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String? token = prefs.getString('station-auth-token');
 
       if (token == null) {
-        prefs.setString('x-auth-token', '');
+        prefs.setString('station-auth-token', '');
       }
 
       http.Response tokenRes = await http.get(
         Uri.parse('$uri/api/v1/stations/token-is-valid'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
+          'station-auth-token': token!,
         },
       );
 
@@ -156,12 +156,15 @@ class StationAuthService {
           Uri.parse('$uri/api/v1/stations/station-details'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
+            'stationUsername':
+                Provider.of<StationProvider>(context).station.username,
           },
         );
 
         if (context.mounted) {
-          var userProvider = Provider.of<StationProvider>(context, listen: false);
-          userProvider.setStation(stationRes.body);
+          var stationProvider =
+              Provider.of<StationProvider>(context, listen: false);
+          stationProvider.setStation(stationRes.body);
         }
       }
     } catch (e) {
@@ -174,13 +177,13 @@ class StationAuthService {
   Future<void> logoutStation({required BuildContext context}) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String? token = prefs.getString('station-auth-token');
 
       http.Response res = await http.post(
         Uri.parse('$uri/api/v1/stations/logout'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
+          'station-auth-token': token!,
         },
       );
 
@@ -189,7 +192,7 @@ class StationAuthService {
           response: res,
           context: context,
           onSuccess: () {
-            prefs.setString('x-auth-token', '');
+            prefs.setString('station-auth-token', '');
             showSnackBar(
               context,
               "Station logged out successfully.",
