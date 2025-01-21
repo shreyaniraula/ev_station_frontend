@@ -1,11 +1,9 @@
 import 'package:ev_charge/constants/styling_variables.dart';
-
 import 'package:ev_charge/screens/station/verification/signup_station.dart';
 import 'package:ev_charge/screens/user/verification/signup_user.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/services/station/auth_service.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
-
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {

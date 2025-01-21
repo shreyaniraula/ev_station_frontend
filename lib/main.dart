@@ -55,15 +55,11 @@ class _MyAppState extends State<MyApp> {
             ),
             onGenerateRoute: (settings) => generateRoute(settings),
             debugShowCheckedModeBanner: false,
-            home:
-                Provider.of<UserProvider>(context).user.accessToken.isNotEmpty
-                    ? const UserHomeScreen()
-                    : Provider.of<StationProvider>(context)
-                            .station
-                            .accessToken
-                            .isNotEmpty
-                        ? const ReservationScreen()
-                        : const LoginPage(),
+            home: Provider.of<UserProvider>(context).user.accessToken.isNotEmpty
+                ? const UserHomeScreen()
+                : Provider.of<StationProvider>(context).station.accessToken.isNotEmpty
+                    ? const ReservationScreen()
+                    : const LoginPage(),
           );
         });
   }

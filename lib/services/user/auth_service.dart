@@ -102,12 +102,10 @@ class UserAuthService {
             }
 
             await prefs.setString(
-                'x-auth-token', jsonDecode(res.body)['data']['accessToken']);
+                'user-auth-token', jsonDecode(res.body)['data']['accessToken']);
 
             if (context.mounted) {
-              Navigator.of(context).pushNamed(
-                UserHomeScreen.routeName,
-              );
+              Navigator.pushNamed(context, UserHomeScreen.routeName);
             }
           },
         );
@@ -122,17 +120,17 @@ class UserAuthService {
   void getUserData(BuildContext context) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String? token = prefs.getString('user-auth-token');
 
       if (token == null) {
-        prefs.setString('x-auth-token', '');
+        prefs.setString('user-auth-token', '');
       }
 
       http.Response tokenRes = await http.get(
         Uri.parse('$uri/api/v1/users/token-is-valid'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
+          'user-auth-token': token!,
         },
       );
 
@@ -143,7 +141,7 @@ class UserAuthService {
           Uri.parse('$uri/api/v1/users/current-user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
-            'x-auth-token': token,
+            'user-auth-token': token,
           },
         );
 
@@ -162,13 +160,13 @@ class UserAuthService {
   Future<void> logoutUser({required BuildContext context}) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String? token = prefs.getString('user-auth-token');
 
       http.Response res = await http.post(
         Uri.parse('$uri/api/v1/users/logout'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
+          'user-auth-token': token!,
         },
       );
 
@@ -177,7 +175,7 @@ class UserAuthService {
           response: res,
           context: context,
           onSuccess: () {
-            prefs.setString('x-auth-token', '');
+            prefs.setString('user-auth-token', '');
             showSnackBar(
               context,
               "User logged out successfully.",
