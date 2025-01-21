@@ -4,7 +4,6 @@ import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/constants/error_handler.dart';
 import 'package:ev_charge/models/station.model.dart';
 import 'package:ev_charge/providers/station_provider.dart';
-import 'package:ev_charge/screens/main_page.dart';
 import 'package:ev_charge/screens/station/home_screen.dart';
 import 'package:ev_charge/screens/user/verification/login_page.dart';
 import 'package:ev_charge/uri.dart';
@@ -121,8 +120,81 @@ class StationAuthService {
                 'x-auth-token', jsonDecode(res.body)['data']['accessToken']);
 
             if (context.mounted) {
-              Navigator.pushNamed(context, MainPage.routeName);
+              Navigator.pushNamed(context, StationHomeScreen.routeName);
             }
+          },
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
+    }
+  }
+
+  void getStationData(BuildContext context) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('x-auth-token');
+
+      if (token == null) {
+        prefs.setString('x-auth-token', '');
+      }
+
+      http.Response tokenRes = await http.get(
+        Uri.parse('$uri/api/v1/stations/token-is-valid'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
+        },
+      );
+
+      var response = jsonDecode(tokenRes.body);
+
+      if (response == true) {
+        http.Response stationRes = await http.get(
+          Uri.parse('$uri/api/v1/stations/station-details'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
+
+        if (context.mounted) {
+          var userProvider = Provider.of<StationProvider>(context, listen: false);
+          userProvider.setStation(stationRes.body);
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
+    }
+  }
+
+  Future<void> logoutStation({required BuildContext context}) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('x-auth-token');
+
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/v1/stations/logout'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
+        },
+      );
+
+      if (context.mounted) {
+        errorHandler(
+          response: res,
+          context: context,
+          onSuccess: () {
+            prefs.setString('x-auth-token', '');
+            showSnackBar(
+              context,
+              "Station logged out successfully.",
+            );
+            Navigator.of(context).pushNamed(LoginPage.routeName);
           },
         );
       }

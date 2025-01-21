@@ -2,9 +2,10 @@ import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/providers/station_provider.dart';
 import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/router.dart';
-import 'package:ev_charge/screens/station/home_screen.dart';
+import 'package:ev_charge/screens/station/reservation_screen.dart';
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/screens/user/verification/login_page.dart';
+import 'package:ev_charge/services/station/auth_service.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
@@ -31,11 +32,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final UserAuthService userAuthService = UserAuthService();
+  final StationAuthService stationAuthService = StationAuthService();
 
   @override
   void initState() {
     super.initState();
     userAuthService.getUserData(context);
+    stationAuthService.getStationData(context);
   }
 
   @override
@@ -53,14 +56,13 @@ class _MyAppState extends State<MyApp> {
             onGenerateRoute: (settings) => generateRoute(settings),
             debugShowCheckedModeBanner: false,
             home:
-                //const HomeScreen(),
                 Provider.of<UserProvider>(context).user.accessToken.isNotEmpty
                     ? const UserHomeScreen()
                     : Provider.of<StationProvider>(context)
                             .station
                             .accessToken
                             .isNotEmpty
-                        ? const StationHomeScreen()
+                        ? const ReservationScreen()
                         : const LoginPage(),
           );
         });
