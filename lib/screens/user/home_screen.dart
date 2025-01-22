@@ -1,5 +1,5 @@
 import 'package:ev_charge/screens/user/map_page.dart';
-import 'package:ev_charge/screens/user/verification/account_page.dart';
+import 'package:ev_charge/screens/user/account_page.dart';
 import 'package:ev_charge/screens/station/stations_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +55,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           ? MapPage()
           : index == 1
               ? const StationsPage()
-              : const AccountPage(),
+              : const UserAccountPage(),
     );
   }
 }

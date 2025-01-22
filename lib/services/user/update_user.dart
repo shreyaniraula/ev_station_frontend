@@ -11,6 +11,52 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateUser {
+  Future<void> updateDetails({
+    required BuildContext context,
+    required String username,
+    required String fullName,
+    required String phoneNumber,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('x-auth-token');
+
+      if (token == null) {
+        prefs.setString('x-auth-token', '');
+      }
+
+      http.Response res = await http.post(
+        Uri.parse('$uri/api/v1/users/update-account'),
+        body: jsonEncode({
+          'username': username,
+          'fullName': fullName,
+          'phoneNumber': phoneNumber,
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'user-auth-token': token!,
+        },
+      );
+
+      print(res.body);
+
+      if (context.mounted) {
+        errorHandler(
+          response: res,
+          context: context,
+          onSuccess: () {
+            showSnackBar(context, 'Account Updated Successfully');
+            Navigator.of(context).pop();
+          },
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, e.toString());
+      }
+    }
+  }
+
   Future<void> updatePassword({
     required BuildContext context,
     required String oldPassword,
@@ -32,7 +78,7 @@ class UpdateUser {
         }),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
+          'user-auth-token': token!,
         },
       );
 
@@ -80,7 +126,7 @@ class UpdateUser {
         }),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
+          'user-auth-token': token!,
         },
       );
 

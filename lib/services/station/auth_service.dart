@@ -157,7 +157,7 @@ class StationAuthService {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'stationUsername':
-                Provider.of<StationProvider>(context).station.username,
+                Provider.of<StationProvider>(context, listen: false).station.username,
           },
         );
 

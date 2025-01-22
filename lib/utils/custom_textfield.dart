@@ -6,6 +6,7 @@ class CustomTextfield extends StatelessWidget {
   final TextEditingController controller;
   final IconData icon;
   final bool readOnly;
+  final void Function(String)? onChanged;
 
   const CustomTextfield({
     super.key,
@@ -14,6 +15,7 @@ class CustomTextfield extends StatelessWidget {
     required this.controller,
     required this.icon,
     this.readOnly = false,
+    this.onChanged
   });
 
   @override
@@ -24,6 +26,7 @@ class CustomTextfield extends StatelessWidget {
           controller: controller,
           obscureText: obscureText,
           readOnly: readOnly,
+          onChanged: onChanged,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'This field is required.';

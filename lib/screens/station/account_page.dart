@@ -1,24 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ev_charge/providers/user_provider.dart';
-import 'package:ev_charge/screens/user/updates/update_image_page.dart';
-import 'package:ev_charge/screens/user/updates/update_password_page.dart';
-import 'package:ev_charge/screens/user/updates/update_user_details_page.dart';
-import 'package:ev_charge/services/station/get_stations.dart';
-import 'package:ev_charge/services/user/auth_service.dart';
+import 'package:ev_charge/providers/station_provider.dart';
+import 'package:ev_charge/screens/station/updates/update_station_details_page.dart';
+import 'package:ev_charge/services/station/auth_service.dart';
 import 'package:ev_charge/utils/custom_textbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+class StationAccountPage extends StatefulWidget {
+  const StationAccountPage({super.key});
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  State<StationAccountPage> createState() => _StationAccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
-  final UserAuthService authService = UserAuthService();
-  final GetStations getStations = GetStations();
+class _StationAccountPageState extends State<StationAccountPage> {
+  final StationAuthService authService = StationAuthService();
 
   String greeting() {
     final hour = DateTime.now().hour;
@@ -30,13 +26,13 @@ class _AccountPageState extends State<AccountPage> {
     return 'Good Evening!';
   }
 
-  void logoutUser() {
-    authService.logoutUser(context: context);
-  }
+  // void logoutUser() {
+  //   authService.logoutUser(context: context);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
+    final station = Provider.of<StationProvider>(context).station;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25.0),
@@ -47,11 +43,11 @@ class _AccountPageState extends State<AccountPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${greeting()}\n${user.username}',
+                '${greeting()}\n${station.username}',
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
               ),
               CachedNetworkImage(
-                imageUrl: user.image,
+                imageUrl: station.stationImage,
                 imageBuilder: (context, imageProvider) => CircleAvatar(
                   radius: 30,
                   foregroundImage: imageProvider,
@@ -67,27 +63,27 @@ class _AccountPageState extends State<AccountPage> {
             buttonText: 'Personal Details',
             frontIcon: Icons.person_outline,
             onTap: () => Navigator.of(context)
-                .pushNamed(UpdateUserDetailsPage.routeName),
+                .pushNamed(UpdateStationDetailsPage.routeName),
           ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
             buttonText: 'Change Password',
             frontIcon: Icons.lock,
-            onTap: () =>
-                Navigator.of(context).pushNamed(UpdatePasswordPage.routeName),
+            // onTap: () =>
+            //     Navigator.of(context).pushNamed(UpdatePasswordPage.routeName),
           ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
             buttonText: 'Update Image',
             frontIcon: Icons.image,
-            onTap: () =>
-                Navigator.of(context).pushNamed(UpdateImagePage.routeName),
+            // onTap: () =>
+            //     Navigator.of(context).pushNamed(UpdateImagePage.routeName),
           ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
             buttonText: 'Notification Settings',
             frontIcon: Icons.notifications,
-            onTap: () => getStations.getAllStations(context: context),
+            // onTap: () => getStations.getAllStations(context: context),
           ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(buttonText: 'Help', frontIcon: Icons.help),
@@ -95,7 +91,7 @@ class _AccountPageState extends State<AccountPage> {
           CustomTextbutton(
             buttonText: 'Log Out',
             frontIcon: Icons.logout,
-            onTap: logoutUser,
+            // onTap: logoutUser,
           ),
           Divider(thickness: 2, color: Colors.black),
         ],
