@@ -1,4 +1,5 @@
 import 'package:ev_charge/constants/styling_variables.dart';
+import 'package:ev_charge/services/user/update_user.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,22 @@ class UpdateUserDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UpdateUser updateUser = UpdateUser();
     final formKey = GlobalKey<FormState>();
 
     final TextEditingController usernameController = TextEditingController();
     final TextEditingController phoneController = TextEditingController();
     final TextEditingController fullNameController = TextEditingController();
+
+    void updateUserDetails(
+        String username, String fullName, String phoneNumber) {
+      updateUser.updateDetails(
+        context: context,
+        username: username,
+        fullName: fullName,
+        phoneNumber: phoneNumber,
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -62,8 +74,11 @@ class UpdateUserDetailsPage extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        showSnackBar(context, 'Account Updated Successfully');
-                        Navigator.of(context).pop();
+                        updateUserDetails(
+                          usernameController.text,
+                          fullNameController.text,
+                          phoneController.text,
+                        );
                       }
                     },
                     style: elevatedButtonStyle,

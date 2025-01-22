@@ -1,6 +1,7 @@
 import 'package:ev_charge/screens/reservation/booking_page.dart';
 import 'package:ev_charge/screens/station/home_screen.dart';
 import 'package:ev_charge/screens/station/reservation_screen.dart';
+import 'package:ev_charge/screens/station/updates/update_station_details_page.dart';
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/screens/common/station_details_screen.dart';
 import 'package:ev_charge/screens/station/stations_page.dart';
@@ -75,6 +76,11 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
       return MaterialPageRoute(
         settings: routesettings,
         builder: (_) => ReservationScreen(),
+      );
+    case UpdateStationDetailsPage.routeName:
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => UpdateStationDetailsPage(),
       );
     default:
       return MaterialPageRoute(

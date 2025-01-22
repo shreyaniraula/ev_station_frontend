@@ -2,6 +2,7 @@ import 'package:ev_charge/constants/api_key.dart';
 import 'package:ev_charge/providers/station_provider.dart';
 import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/router.dart';
+import 'package:ev_charge/screens/station/home_screen.dart';
 import 'package:ev_charge/screens/station/reservation_screen.dart';
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/screens/user/verification/login_page.dart';
@@ -58,7 +59,7 @@ class _MyAppState extends State<MyApp> {
             home: Provider.of<UserProvider>(context).user.accessToken.isNotEmpty
                 ? const UserHomeScreen()
                 : Provider.of<StationProvider>(context).station.accessToken.isNotEmpty
-                    ? const ReservationScreen()
+                    ? const StationHomeScreen()
                     : const LoginPage(),
           );
         });

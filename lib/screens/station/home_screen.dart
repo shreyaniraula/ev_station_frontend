@@ -1,7 +1,7 @@
 import 'package:ev_charge/providers/station_provider.dart';
 import 'package:ev_charge/screens/reservation/booking_page.dart';
+import 'package:ev_charge/screens/station/account_page.dart';
 import 'package:ev_charge/screens/station/reservation_screen.dart';
-import 'package:ev_charge/screens/user/verification/account_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,8 +58,9 @@ class _StationHomeScreenState extends State<StationHomeScreen> {
       body: index == 0
           ? ReservationScreen()
           : index == 1
-              ? BookingPage(name: station.name, address: station.location, id: station.id)
-              : const AccountPage(),
+              ? BookingPage(
+                  name: station.name, address: station.location, id: station.id)
+              : const StationAccountPage(),
     );
   }
 }
