@@ -1,6 +1,8 @@
-import 'package:ev_charge/screens/reservation/booking_page.dart';
+import 'package:ev_charge/screens/reservation/user_booking_page.dart';
 import 'package:ev_charge/screens/station/home_screen.dart';
 import 'package:ev_charge/screens/station/reservation_screen.dart';
+import 'package:ev_charge/screens/station/updates/update_image_page.dart';
+import 'package:ev_charge/screens/station/updates/update_password_page.dart';
 import 'package:ev_charge/screens/station/updates/update_station_details_page.dart';
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/screens/common/station_details_screen.dart';
@@ -42,26 +44,26 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
         settings: routesettings,
         builder: (_) => const UpdateUserDetailsPage(),
       );
-    case UpdatePasswordPage.routeName:
+    case UpdateUserPasswordPage.routeName:
       return MaterialPageRoute(
         settings: routesettings,
-        builder: (_) => const UpdatePasswordPage(),
+        builder: (_) => const UpdateUserPasswordPage(),
       );
-    case UpdateImagePage.routeName:
+    case UpdateUserImagePage.routeName:
       return MaterialPageRoute(
         settings: routesettings,
-        builder: (_) => const UpdateImagePage(),
+        builder: (_) => const UpdateUserImagePage(),
       );
     case StationsPage.routeName:
       return MaterialPageRoute(
         settings: routesettings,
         builder: (_) => const StationsPage(),
       );
-    case BookingPage.routeName:
-      final args = routesettings.arguments as BookingPage;
+    case UserBookingPage.routeName:
+      final args = routesettings.arguments as UserBookingPage;
       return MaterialPageRoute(
         settings: routesettings,
-        builder: (_) => BookingPage(
+        builder: (_) => UserBookingPage(
           name: args.name,
           id: args.id,
           address: args.address,
@@ -81,6 +83,16 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
       return MaterialPageRoute(
         settings: routesettings,
         builder: (_) => UpdateStationDetailsPage(),
+      );
+    case UpdateStationImagePage.routeName:
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => const UpdateStationImagePage(),
+      );
+    case UpdateStationPasswordPage.routeName:
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => const UpdateStationPasswordPage(),
       );
     default:
       return MaterialPageRoute(

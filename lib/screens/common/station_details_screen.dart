@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/models/station.model.dart';
-import 'package:ev_charge/screens/reservation/booking_page.dart';
+import 'package:ev_charge/screens/reservation/user_booking_page.dart';
 import 'package:ev_charge/services/station/get_stations.dart';
 import 'package:flutter/material.dart';
 
@@ -126,7 +126,7 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Available Slots: ${(station.noOfSlots-station.reservedSlots).toString()}',
+                  'Available Slots: ${(station.noOfSlots - station.reservedSlots).toString()}',
                   style: TextStyle(
                     fontWeight: FontWeight.w100,
                   ),
@@ -135,8 +135,8 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed(
-                      BookingPage.routeName,
-                      arguments: BookingPage(
+                      UserBookingPage.routeName,
+                      arguments: UserBookingPage(
                         name: station.name,
                         address: station.location,
                         id: station.id,

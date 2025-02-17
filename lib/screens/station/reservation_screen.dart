@@ -34,9 +34,16 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
     try {
       final bookings = await reservationService.getReservations();
+      final now = DateTime.now();
+      final futureBookings = bookings.where(
+        (reservation) {
+          final startingTime = reservation.date;
+          return startingTime!.isAfter(now);
+        },
+      ).toList();
       if (mounted) {
         setState(() {
-          _reservations = bookings;
+          _reservations = futureBookings;
           _isLoading = false;
         });
       }
@@ -113,7 +120,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                           size: 16, color: Colors.grey),
                                       const SizedBox(width: 8),
                                       Text(
-                                        reservation.startingTime,
+                                         TimeOfDay.fromDateTime(reservation.startingTime).toString(),
                                         style: const TextStyle(
                                           fontSize: 15,
                                         ),
@@ -123,7 +130,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                                           size: 16, color: Colors.grey),
                                       const SizedBox(width: 8),
                                       Text(
-                                        reservation.endingTime,
+                                        TimeOfDay.fromDateTime(reservation.endingTime).toString(),
                                         style: const TextStyle(
                                           fontSize: 15,
                                         ),

@@ -180,7 +180,10 @@ class UserAuthService {
               context,
               "User logged out successfully.",
             );
-            Navigator.of(context).pushNamed(LoginPage.routeName);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              LoginPage.routeName,
+              (route) => false,
+            );
           },
         );
       }

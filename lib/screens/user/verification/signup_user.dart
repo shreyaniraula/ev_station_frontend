@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/services/user/auth_service.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
+import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -129,6 +130,7 @@ class _SignupUserState extends State<SignupUser> {
                           obscureText: false,
                           icon: Icons.phone,
                           controller: _phoneController,
+                          keyboardType: TextInputType.phone,
                         ),
                         const SizedBox(height: 20),
                         GestureDetector(
@@ -161,6 +163,11 @@ class _SignupUserState extends State<SignupUser> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              if(_passwordController.text.length < 6){
+                                showSnackBar(context,
+                                    'Password must be at least 6 characters');
+                                return;
+                              }
                               registerUser();
                             }
                           },

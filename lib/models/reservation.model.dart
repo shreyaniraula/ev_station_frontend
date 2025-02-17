@@ -5,8 +5,9 @@ class Reservation {
   final String reservedBy;
   final String reservedTo;
   final String paymentAmount;
-  final String startingTime;
-  final String endingTime;
+  final DateTime startingTime;
+  final DateTime endingTime;
+  final DateTime? date;
   final String remarks;
 
   Reservation({
@@ -16,6 +17,7 @@ class Reservation {
     required this.paymentAmount,
     required this.startingTime,
     required this.endingTime,
+    this.date,
     required this.remarks,
   });
 
@@ -27,6 +29,7 @@ class Reservation {
       'paymentAmount': paymentAmount,
       'startingTime': startingTime,
       'endingTime': endingTime,
+      'date': date,
       'remarks': remarks,
     };
   }
@@ -39,6 +42,7 @@ class Reservation {
       paymentAmount: map['paymentAmount'] ?? '',
       startingTime: map['startingTime'] ?? '',
       endingTime: map['endingTime'] ?? '',
+      date: map['date'] != null ? DateTime.parse(map['date']) : null,
       remarks: map['remarks'] ?? '',
     );
   }

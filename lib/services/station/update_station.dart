@@ -10,51 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UpdateUser {
-  Future<void> updateDetails({
-    required BuildContext context,
-    required String username,
-    required String fullName,
-    required String phoneNumber,
-  }) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
-
-      if (token == null) {
-        prefs.setString('x-auth-token', '');
-      }
-
-      http.Response res = await http.post(
-        Uri.parse('$uri/api/v1/users/update-account'),
-        body: jsonEncode({
-          'username': username,
-          'fullName': fullName,
-          'phoneNumber': phoneNumber,
-        }),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'user-auth-token': token!,
-        },
-      );
-
-      if (context.mounted) {
-        errorHandler(
-          response: res,
-          context: context,
-          onSuccess: () {
-            showSnackBar(context, 'Account Updated Successfully');
-            Navigator.of(context).pop();
-          },
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        showSnackBar(context, e.toString());
-      }
-    }
-  }
-
+class UpdateStation {
   Future<void> updatePassword({
     required BuildContext context,
     required String oldPassword,
@@ -62,21 +18,21 @@ class UpdateUser {
   }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('user-auth-token');
+      String? token = prefs.getString('station-auth-token');
 
       if (token == null) {
-        prefs.setString('user-auth-token', '');
+        prefs.setString('station-auth-token', '');
       }
 
       http.Response res = await http.post(
-        Uri.parse('$uri/api/v1/users/change-password'),
+        Uri.parse('$uri/api/v1/stations/change-password'),
         body: jsonEncode({
           'oldPassword': oldPassword,
           'newPassword': newPassword,
         }),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'user-auth-token': token!,
+          'station-auth-token': token!,
         },
       );
 
@@ -97,34 +53,34 @@ class UpdateUser {
     }
   }
 
-  Future<void> updateImage({
+  Future<bool> updateImage({
     required BuildContext context,
     required XFile image,
   }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String? token = prefs.getString('station-auth-token');
 
       if (token == null) {
-        prefs.setString('x-auth-token', '');
+        prefs.setString('station-auth-token', '');
       }
 
       final cloudinary =
           CloudinaryPublic(kCloudinaryCloudName, kCloudinaryUploadPreset);
 
       CloudinaryResponse cloudinaryRes = await cloudinary
-          .uploadFile(CloudinaryFile.fromFile(image.path, folder: 'user'));
+          .uploadFile(CloudinaryFile.fromFile(image.path, folder: 'station'));
 
       final imageUrl = cloudinaryRes.secureUrl;
 
       http.Response res = await http.patch(
-        Uri.parse('$uri/api/v1/users/update-image'),
+        Uri.parse('$uri/api/v1/stations/update-station-image'),
         body: jsonEncode({
           'imageUrl': imageUrl,
         }),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'user-auth-token': token!,
+          'station-auth-token': token!,
         },
       );
 
@@ -134,14 +90,16 @@ class UpdateUser {
           context: context,
           onSuccess: () {
             showSnackBar(context, 'Image Updated Successfully');
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
           },
         );
       }
+      return res.statusCode == 200;
     } catch (e) {
       if (context.mounted) {
         showSnackBar(context, e.toString());
       }
+      return false;
     }
   }
 }

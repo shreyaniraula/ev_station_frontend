@@ -3,7 +3,6 @@ import 'package:ev_charge/providers/station_provider.dart';
 import 'package:ev_charge/providers/user_provider.dart';
 import 'package:ev_charge/router.dart';
 import 'package:ev_charge/screens/station/home_screen.dart';
-import 'package:ev_charge/screens/station/reservation_screen.dart';
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/screens/user/verification/login_page.dart';
 import 'package:ev_charge/services/station/auth_service.dart';

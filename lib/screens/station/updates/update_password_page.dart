@@ -1,12 +1,12 @@
 import 'package:ev_charge/constants/styling_variables.dart';
-import 'package:ev_charge/services/user/update_user.dart';
+import 'package:ev_charge/services/station/update_station.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 
-class UpdateUserPasswordPage extends StatelessWidget {
-  static const String routeName = '/update-user-password-page';
-  const UpdateUserPasswordPage({super.key});
+class UpdateStationPasswordPage extends StatelessWidget {
+  static const String routeName = '/update-station-password-page';
+  const UpdateStationPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +15,10 @@ class UpdateUserPasswordPage extends StatelessWidget {
     final TextEditingController oldPasswordController = TextEditingController();
     final TextEditingController newPasswordController = TextEditingController();
 
-    final UpdateUser updateUser = UpdateUser();
+    final UpdateStation updateStation = UpdateStation();
 
     void updatePassword() {
-      updateUser.updatePassword(
+      updateStation.updatePassword(
         context: context,
         oldPassword: oldPasswordController.text,
         newPassword: newPasswordController.text,
@@ -68,7 +68,7 @@ class UpdateUserPasswordPage extends StatelessWidget {
                               'Old and New Passwords cannot be the same');
                           return;
                         }
-                        if(newPasswordController.text.length < 6){
+                        if (newPasswordController.text.length < 6) {
                           showSnackBar(context,
                               'Password must be at least 6 characters');
                           return;

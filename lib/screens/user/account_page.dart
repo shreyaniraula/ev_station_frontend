@@ -64,7 +64,7 @@ class _UserAccountPageState extends State<UserAccountPage> {
           SizedBox(height: 50),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
-            buttonText: 'Personal Details',
+            buttonText: 'Update Details',
             frontIcon: Icons.person_outline,
             onTap: () => Navigator.of(context)
                 .pushNamed(UpdateUserDetailsPage.routeName),
@@ -73,21 +73,15 @@ class _UserAccountPageState extends State<UserAccountPage> {
           CustomTextbutton(
             buttonText: 'Change Password',
             frontIcon: Icons.lock,
-            onTap: () =>
-                Navigator.of(context).pushNamed(UpdatePasswordPage.routeName),
+            onTap: () => Navigator.of(context)
+                .pushNamed(UpdateUserPasswordPage.routeName),
           ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
             buttonText: 'Update Image',
             frontIcon: Icons.image,
             onTap: () =>
-                Navigator.of(context).pushNamed(UpdateImagePage.routeName),
-          ),
-          Divider(thickness: 2, color: Colors.black),
-          CustomTextbutton(
-            buttonText: 'Notification Settings',
-            frontIcon: Icons.notifications,
-            onTap: () => getStations.getAllStations(context: context),
+                Navigator.of(context).pushNamed(UpdateUserImagePage.routeName),
           ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(buttonText: 'Help', frontIcon: Icons.help),

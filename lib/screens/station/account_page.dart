@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ev_charge/providers/station_provider.dart';
+import 'package:ev_charge/screens/station/updates/update_image_page.dart';
+import 'package:ev_charge/screens/station/updates/update_password_page.dart';
 import 'package:ev_charge/screens/station/updates/update_station_details_page.dart';
 import 'package:ev_charge/services/station/auth_service.dart';
 import 'package:ev_charge/utils/custom_textbutton.dart';
@@ -26,9 +28,9 @@ class _StationAccountPageState extends State<StationAccountPage> {
     return 'Good Evening!';
   }
 
-  // void logoutUser() {
-  //   authService.logoutUser(context: context);
-  // }
+  void logoutStation() {
+    authService.logoutStation(context: context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,29 +71,23 @@ class _StationAccountPageState extends State<StationAccountPage> {
           CustomTextbutton(
             buttonText: 'Change Password',
             frontIcon: Icons.lock,
-            // onTap: () =>
-            //     Navigator.of(context).pushNamed(UpdatePasswordPage.routeName),
+            onTap: () => Navigator.of(context)
+                .pushNamed(UpdateStationPasswordPage.routeName),
           ),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
-            buttonText: 'Update Image',
-            frontIcon: Icons.image,
-            // onTap: () =>
-            //     Navigator.of(context).pushNamed(UpdateImagePage.routeName),
-          ),
-          Divider(thickness: 2, color: Colors.black),
-          CustomTextbutton(
-            buttonText: 'Notification Settings',
-            frontIcon: Icons.notifications,
-            // onTap: () => getStations.getAllStations(context: context),
-          ),
+              buttonText: 'Update Image',
+              frontIcon: Icons.image,
+              onTap: () => Navigator.of(context)
+                  .pushNamed(UpdateStationImagePage.routeName)),
+          
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(buttonText: 'Help', frontIcon: Icons.help),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
             buttonText: 'Log Out',
             frontIcon: Icons.logout,
-            // onTap: logoutUser,
+            onTap: logoutStation,
           ),
           Divider(thickness: 2, color: Colors.black),
         ],

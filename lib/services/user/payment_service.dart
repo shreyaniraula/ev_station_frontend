@@ -1,4 +1,4 @@
-import 'package:ev_charge/screens/reservation/booking_page.dart';
+import 'package:ev_charge/screens/reservation/user_booking_page.dart';
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +35,11 @@ class PaymentService {
       },
       onFailure: (failureModel) {
         showSnackBar(context, 'Payment Failed. Try again.');
-        Navigator.of(context).pushNamed(BookingPage.routeName);
+        Navigator.of(context).pushNamed(UserBookingPage.routeName);
       },
       onCancel: () {
         showSnackBar(context, 'Payment Cancelled');
-        Navigator.of(context).pushNamed(BookingPage.routeName);
+        Navigator.of(context).pushNamed(UserBookingPage.routeName);
       },
     );
   }

@@ -6,17 +6,18 @@ class CustomTextfield extends StatelessWidget {
   final TextEditingController controller;
   final IconData icon;
   final bool readOnly;
+  final TextInputType? keyboardType;
   final void Function(String)? onChanged;
 
-  const CustomTextfield({
-    super.key,
-    this.labelText,
-    required this.obscureText,
-    required this.controller,
-    required this.icon,
-    this.readOnly = false,
-    this.onChanged
-  });
+  const CustomTextfield(
+      {super.key,
+      this.labelText,
+      required this.obscureText,
+      required this.controller,
+      required this.icon,
+      this.keyboardType,
+      this.readOnly = false,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,7 @@ class CustomTextfield extends StatelessWidget {
           obscureText: obscureText,
           readOnly: readOnly,
           onChanged: onChanged,
+          keyboardType: keyboardType,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'This field is required.';

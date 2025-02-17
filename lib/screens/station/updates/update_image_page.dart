@@ -1,21 +1,21 @@
 import 'dart:io';
 
 import 'package:ev_charge/constants/styling_variables.dart';
-import 'package:ev_charge/services/user/update_user.dart';
+import 'package:ev_charge/services/station/update_station.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UpdateUserImagePage extends StatefulWidget {
-  static const String routeName = '/update-user-image-page';
+class UpdateStationImagePage extends StatefulWidget {
+  static const String routeName = '/update-station-image-page';
 
-  const UpdateUserImagePage({super.key});
+  const UpdateStationImagePage({super.key});
 
   @override
-  State<UpdateUserImagePage> createState() => _UpdateUserImagePageState();
+  State<UpdateStationImagePage> createState() => _UpdateStationImagePageState();
 }
 
-class _UpdateUserImagePageState extends State<UpdateUserImagePage> {
-  final UpdateUser updateUser = UpdateUser();
+class _UpdateStationImagePageState extends State<UpdateStationImagePage> {
+  final UpdateStation updateStation = UpdateStation();
   XFile? _image;
 
   Future<void> _pickImage() async {
@@ -27,11 +27,14 @@ class _UpdateUserImagePageState extends State<UpdateUserImagePage> {
     });
   }
 
-  void updateImage() {
-    updateUser.updateImage(
+  void updateImage() async {
+    bool success = await updateStation.updateImage(
       context: context,
       image: _image!,
     );
+    if (success) {
+      Navigator.pop(context, true);
+    }
   }
 
   @override

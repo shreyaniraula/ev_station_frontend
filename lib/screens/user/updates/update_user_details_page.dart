@@ -1,6 +1,5 @@
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/services/user/update_user.dart';
-import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
 import 'package:flutter/material.dart';
 

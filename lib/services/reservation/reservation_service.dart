@@ -7,11 +7,54 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReservationService {
+  Future<void> updateReservation({
+    required BuildContext context,
+    required DateTime startingTime,
+    required DateTime endingTime,
+    required String paymentAmount,
+    required String remarks,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('station-auth-token');
+
+      if (token == null) {
+        prefs.setString('station-auth-token', '');
+      }
+
+      final res = await http.post(
+        Uri.parse('$uri/api/v1/reserve/update-reservation'),
+        headers: {
+          'Content-Type': 'application/json',
+          'station-auth-token': token!,
+        },
+        body: jsonEncode({
+          'paymentAmount': paymentAmount,
+          'startingTime': startingTime.toIso8601String(),
+          'endingTime': endingTime.toIso8601String(),
+          'remarks': remarks,
+        }),
+      );
+
+      if (context.mounted) {
+        if (res.statusCode == 200) {
+          showSnackBar(context, 'Booking successful!');
+        } else {
+          showSnackBar(context, jsonDecode(res.body)['message']);
+        }
+      }
+    } catch (error) {
+      if (context.mounted) {
+        showSnackBar(context, 'Error: $error');
+      }
+    }
+  }
+
   Future<void> bookStation({
     required BuildContext context,
     required String stationId,
-    required String startingTime,
-    required String endingTime,
+    required DateTime startingTime,
+    required DateTime endingTime,
     required String paymentAmount,
     required String remarks,
   }) async {
@@ -31,8 +74,9 @@ class ReservationService {
         },
         body: jsonEncode({
           'paymentAmount': paymentAmount,
-          'startingTime': startingTime,
-          'endingTime': endingTime,
+          'startingTime': startingTime.toLocal().toIso8601String(),
+          'endingTime': endingTime.toLocal().toIso8601String(),
+          'date': DateTime.now().toLocal().toIso8601String(),
           'remarks': remarks,
         }),
       );
@@ -81,6 +125,7 @@ class ReservationService {
               paymentAmount: item['paymentAmount'].toString(),
               startingTime: item['startingTime'],
               endingTime: item['endingTime'],
+              date: item['date'],
               remarks: item['remarks'],
             ),
           );

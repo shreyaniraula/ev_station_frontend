@@ -5,17 +5,17 @@ import 'package:ev_charge/utils/custom_textfield.dart';
 import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 
-class BookingPage extends StatefulWidget {
+class UserBookingPage extends StatefulWidget {
   static const String routeName = '/booking-page';
   final String name, address, id;
-  const BookingPage(
+  const UserBookingPage(
       {super.key, required this.name, required this.address, required this.id});
 
   @override
-  State<BookingPage> createState() => _BookingPageState();
+  State<UserBookingPage> createState() => _UserBookingPageState();
 }
 
-class _BookingPageState extends State<BookingPage> {
+class _UserBookingPageState extends State<UserBookingPage> {
   final TextEditingController chargingStationController =
       TextEditingController();
   final TextEditingController chargingStationLocationController =
@@ -28,6 +28,8 @@ class _BookingPageState extends State<BookingPage> {
   final ReservationService reservationService = ReservationService();
   final PaymentService paymentService = PaymentService();
 
+  late DateTime startDateTime, endDateTime;
+
   late double chargingDurationInHours;
   late int amount;
 
@@ -37,11 +39,14 @@ class _BookingPageState extends State<BookingPage> {
       context: context,
       initialTime: TimeOfDay.now(),
     );
+    print('************************************************');
+    print('Picked Time: $picked');
     if (picked != null) {
       // Format time as hh:mm and set it in the controller
       final formattedTime =
           '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
       controller.text = formattedTime;
+      print('Formatted Tiem: $formattedTime');
     }
   }
 
@@ -64,9 +69,9 @@ class _BookingPageState extends State<BookingPage> {
 
     // Convert TimeOfDay to DateTime for comparison
     final now = DateTime.now();
-    final DateTime startDateTime = DateTime(
+    startDateTime = DateTime(
         now.year, now.month, now.day, startTime.hour, startTime.minute);
-    final DateTime endDateTime =
+    endDateTime =
         DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
 
     // Check if start time is in the past
@@ -91,8 +96,8 @@ class _BookingPageState extends State<BookingPage> {
     reservationService.bookStation(
       context: context,
       stationId: widget.id,
-      startingTime: startTimeController.text,
-      endingTime: endTimeController.text,
+      startingTime: startDateTime,
+      endingTime: endDateTime,
       paymentAmount: amount.toString(),
       remarks: remarksController.text,
     );
@@ -185,8 +190,6 @@ class _BookingPageState extends State<BookingPage> {
                         startTimeController.clear();
                         endTimeController.clear();
                         remarksController.clear();
-                        // Navigator.of(context)
-                        //     .pushNamed(UserHomeScreen.routeName);
                       }
                     }
                   },

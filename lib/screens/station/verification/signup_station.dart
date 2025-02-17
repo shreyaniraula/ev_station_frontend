@@ -4,6 +4,7 @@ import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/services/station/auth_service.dart';
 import 'package:ev_charge/services/station/get_stations.dart';
 import 'package:ev_charge/utils/custom_textfield.dart';
+import 'package:ev_charge/utils/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -42,7 +43,7 @@ class _SignupStationState extends State<SignupStation> {
   void registerStation() {
     _authService.registerStation(
       context: context,
-      stationName: _stationNameController.text,
+      stationName: selectedStation!['name']!,
       username: _usernameController.text,
       password: _passwordController.text,
       phoneNumber: _phoneController.text,
@@ -89,9 +90,6 @@ class _SignupStationState extends State<SignupStation> {
       _locationController.text = selectedStation!['address'] ?? '';
     });
   }
-
-  //TODO: Override dispose everywhere
-  //TODO: Make reservation atomic
 
   @override
   Widget build(BuildContext context) {
@@ -196,12 +194,6 @@ class _SignupStationState extends State<SignupStation> {
                               : null,
                         ),
                         const SizedBox(height: 20),
-                        // CustomTextfield(
-                        //   labelText: 'Station Name',
-                        //   icon: Icons.business,
-                        //   controller: _stationNameController,
-                        //   obscureText: false,
-                        // ),
                         CustomTextfield(
                           labelText: 'Username',
                           icon: Icons.person,
@@ -220,6 +212,7 @@ class _SignupStationState extends State<SignupStation> {
                           icon: Icons.phone,
                           controller: _phoneController,
                           obscureText: false,
+                          keyboardType: TextInputType.phone,
                         ),
                         CustomTextfield(
                           labelText: 'Location',
@@ -320,6 +313,11 @@ class _SignupStationState extends State<SignupStation> {
                         ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
+                              if (_passwordController.text.length < 6) {
+                                showSnackBar(context,
+                                    'Password must be at least 6 characters long.');
+                                return;
+                              }
                               registerStation();
                             }
                           },
