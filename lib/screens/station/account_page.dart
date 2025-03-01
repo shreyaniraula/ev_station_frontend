@@ -80,9 +80,6 @@ class _StationAccountPageState extends State<StationAccountPage> {
               frontIcon: Icons.image,
               onTap: () => Navigator.of(context)
                   .pushNamed(UpdateStationImagePage.routeName)),
-          
-          Divider(thickness: 2, color: Colors.black),
-          CustomTextbutton(buttonText: 'Help', frontIcon: Icons.help),
           Divider(thickness: 2, color: Colors.black),
           CustomTextbutton(
             buttonText: 'Log Out',

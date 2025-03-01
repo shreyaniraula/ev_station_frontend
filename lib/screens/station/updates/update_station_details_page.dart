@@ -19,15 +19,6 @@ class _UpdateStationDetailsPageState extends State<UpdateStationDetailsPage> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
-  // void updateUsernameAndLocation(String val) {
-  //   setState(() {
-  //     String formattedName =
-  //         fullNameController.text.toLowerCase().replaceAll(' ', '_');
-  //     String formattedAddress =
-  //         addressController.text.toLowerCase().replaceAll(' ', '_');
-  //     usernameController.text = '${formattedName}_$formattedAddress';
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +29,12 @@ class _UpdateStationDetailsPageState extends State<UpdateStationDetailsPage> {
     usernameController.text = station.username;
     phoneController.text = station.phoneNumber;
     final String imageUrl = station.stationImage;
+    final String panCard = station.panCard;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Station Details'),
-        backgroundColor: const Color.fromARGB(255, 62, 182, 122),
+        backgroundColor: Color.fromARGB(248, 203, 243, 175),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),
@@ -95,7 +87,12 @@ class _UpdateStationDetailsPageState extends State<UpdateStationDetailsPage> {
                   controller: phoneController,
                   readOnly: true,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
+                Text(
+                  'Station Image',
+                  style: TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 10),
                 Container(
                   height: 200,
                   width: double.infinity,
@@ -104,6 +101,21 @@ class _UpdateStationDetailsPageState extends State<UpdateStationDetailsPage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Image.network(imageUrl, fit: BoxFit.cover),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Pan Card Image',
+                  style: TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Image.network(panCard, fit: BoxFit.cover),
                 ),
               ],
             ),

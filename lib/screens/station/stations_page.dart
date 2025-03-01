@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ev_charge/screens/common/station_details_screen.dart';
 import 'package:ev_charge/services/station/get_stations.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +35,7 @@ class _StationsPageState extends State<StationsPage> {
     return ListView.builder(
       itemCount: stations.length,
       itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -45,19 +44,21 @@ class _StationsPageState extends State<StationsPage> {
                 StationDetailsScreen.routeName,
                 arguments: stations[index]['username'],
               ),
-              child: CachedNetworkImage(
-                imageUrl: stations[index]['stationImage'],
-                placeholder: (context, url) => SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: CircularProgressIndicator(color: Colors.blue),
-                ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                height: 200,
+              child: SizedBox(
                 width: double.infinity,
-                fit: BoxFit.cover,
+                height: 220,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    image: DecorationImage(
+                      image: NetworkImage(stations[index]['stationImage']),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
             ),
+            SizedBox(height: 10),
             Text(
               stations[index]['name'],
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ev_charge/constants/styling_variables.dart';
 import 'package:ev_charge/models/station.model.dart';
 import 'package:ev_charge/screens/reservation/user_booking_page.dart';
@@ -28,7 +27,6 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
     stationImage: '',
     accessToken: '',
     noOfSlots: 0,
-    reservedSlots: 0,
     isVerified: false,
   );
 
@@ -53,86 +51,49 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: 250,
-              width: 500,
-              child: CachedNetworkImage(
-                imageUrl: station.stationImage,
-                placeholder: (context, url) => SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: CircularProgressIndicator(color: Colors.blue),
-                ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                height: 200,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(station.name),
+        backgroundColor: Color.fromARGB(248, 203, 243, 175),
+      ),
+      backgroundColor: const Color.fromARGB(255, 240, 242, 246),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+          child: Column(
+            spacing: 10,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
                 width: double.infinity,
-                fit: BoxFit.cover,
+                height: 300,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    image: DecorationImage(
+                      image: NetworkImage(station.stationImage),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  station.name,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  station.location,
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Contact',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      Icons.phone,
-                      color: Color.fromARGB(255, 156, 240, 88),
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      station.phoneNumber,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Number of Slots: ${station.noOfSlots.toString()}',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Available Slots: ${(station.noOfSlots - station.reservedSlots).toString()}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w100,
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
+              SizedBox(height: 20),
+              StationInfo(
+                keys: 'Station Name',
+                values: station.name,
+              ),
+              StationInfo(keys: 'Location', values: station.location),
+              StationInfo(keys: 'Contact', values: station.phoneNumber),
+              StationInfo(
+                  keys: 'Number of Slots',
+                  values: station.noOfSlots.toString()),
+              StationInfo(
+                  keys: 'Verified',
+                  values: station.isVerified ? 'True' : 'False'),
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed(
                       UserBookingPage.routeName,
@@ -144,22 +105,57 @@ class _StationDetailsScreenState extends State<StationDetailsScreen> {
                     );
                   },
                   style: elevatedButtonStyle,
-                  child: Text('Book Station'),
-                ),
-              ],
-            ),
-            if (!station.isVerified)
-              Container(
-                width: double.infinity,
-                color: Colors.red[100],
-                child: Text(
-                  'This station is not verified yet.',
-                  style: TextStyle(fontSize: 18),
+                  child: Text(
+                    'Book Station',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
-          ],
+              // Spacer(),
+              // if (!station.isVerified)
+              //   Container(
+              //     width: double.infinity,
+              //     color: Colors.red[100],
+              //     child: Text(
+              //       'This station is not verified yet.',
+              //       style: TextStyle(fontSize: 18),
+              //     ),
+              //   ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class StationInfo extends StatelessWidget {
+  const StationInfo({
+    super.key,
+    required this.keys,
+    required this.values,
+  });
+
+  final String keys, values;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          keys,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        Text(
+          values,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+      ],
     );
   }
 }

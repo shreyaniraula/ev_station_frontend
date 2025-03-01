@@ -1,3 +1,4 @@
+import 'package:ev_charge/screens/reservation/queue_screen.dart';
 import 'package:ev_charge/screens/reservation/user_booking_page.dart';
 import 'package:ev_charge/screens/station/home_screen.dart';
 import 'package:ev_charge/screens/station/reservation_screen.dart';
@@ -7,6 +8,7 @@ import 'package:ev_charge/screens/station/updates/update_station_details_page.da
 import 'package:ev_charge/screens/user/home_screen.dart';
 import 'package:ev_charge/screens/common/station_details_screen.dart';
 import 'package:ev_charge/screens/station/stations_page.dart';
+import 'package:ev_charge/screens/user/my_reservations.dart';
 import 'package:ev_charge/screens/user/updates/update_image_page.dart';
 import 'package:ev_charge/screens/user/updates/update_password_page.dart';
 import 'package:ev_charge/screens/user/updates/update_user_details_page.dart';
@@ -93,6 +95,16 @@ Route<dynamic> generateRoute(RouteSettings routesettings) {
       return MaterialPageRoute(
         settings: routesettings,
         builder: (_) => const UpdateStationPasswordPage(),
+      );
+    case MyReservations.routeName:
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => const MyReservations(),
+      );
+    case QueueScreen.routeName:
+      return MaterialPageRoute(
+        settings: routesettings,
+        builder: (_) => const QueueScreen(),
       );
     default:
       return MaterialPageRoute(

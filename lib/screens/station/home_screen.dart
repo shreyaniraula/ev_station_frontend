@@ -1,4 +1,5 @@
 import 'package:ev_charge/providers/station_provider.dart';
+import 'package:ev_charge/screens/reservation/queue_screen.dart';
 import 'package:ev_charge/screens/reservation/station_booking_page.dart';
 import 'package:ev_charge/screens/station/account_page.dart';
 import 'package:ev_charge/screens/station/reservation_screen.dart';
@@ -25,7 +26,10 @@ class _StationHomeScreenState extends State<StationHomeScreen> {
       appBar: AppBar(
         title: index == 0
             ? const Text('Reservations')
-            : const Text('Add Reservation'),
+            : index == 1
+                ? const Text('Add Reservation')
+                : const Text('Account'),
+        backgroundColor: Color.fromARGB(248, 203, 243, 175),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
@@ -64,6 +68,16 @@ class _StationHomeScreenState extends State<StationHomeScreen> {
                   id: station.id,
                 )
               : const StationAccountPage(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(248, 203, 243, 175),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QueueScreen()),
+          );
+        },
+        child: const Icon(Icons.queue),
+      ),
     );
   }
 }

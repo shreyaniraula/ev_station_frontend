@@ -24,7 +24,7 @@ class _MapPageState extends State<MapPage> {
   final Location _locationController = Location();
   LatLng? currentPosition;
   final Set<Marker> _markers = {};
-  final List<LatLng> _routeCoordinates = [];
+  final List<LatLng> routeCoordinates = [];
   final Set<Polyline> _polylines = {};
 
   @override
@@ -152,7 +152,7 @@ class _MapPageState extends State<MapPage> {
       LatLng stationLocation =
           LatLng(station['latitude'], station['longitude']);
       double distance = await getDistance(currentPosition!, stationLocation);
-
+      print('Distance to ${station['name']}: $distance');
       if (distance < nearestDistance) {
         nearestDistance = distance;
         nearestStation = station; // Store the nearest station
@@ -160,6 +160,8 @@ class _MapPageState extends State<MapPage> {
     }
 
     if (nearestStation != null) {
+      print(
+          'Nearest station: ${nearestStation['name']} at $nearestDistance meters');
       // Add the nearest station marker
       _markers.add(Marker(
         markerId: const MarkerId('nearest_station'),

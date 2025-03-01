@@ -8,7 +8,7 @@ class PaymentService {
   String generateUniqueProductIdentity() {
     return DateTime.now()
         .millisecondsSinceEpoch
-        .toString(); // Timestamp as unique ID
+        .toString();
   }
 
   void makePayment({
@@ -17,8 +17,8 @@ class PaymentService {
     required int amount,
     required Function() onSuccess,
   }) {
+    print('here');
     String productIdentity = generateUniqueProductIdentity();
-    // Convert to paisa
 
     KhaltiScope.of(context).pay(
       config: PaymentConfig(
@@ -44,3 +44,11 @@ class PaymentService {
     );
   }
 }
+
+/*
+Test Khalti ID for 9800000000 9800000001 9800000002 9800000003 9800000004 9800000005
+
+Test MPIN 1111
+
+Test OTP 987654
+*/

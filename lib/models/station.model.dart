@@ -11,7 +11,6 @@ class Station {
   final String stationImage;
   final String accessToken;
   final int noOfSlots;
-  final int reservedSlots;
   final bool isVerified;
 
   Station({
@@ -25,7 +24,6 @@ class Station {
     required this.stationImage,
     required this.accessToken,
     required this.noOfSlots,
-    required this.reservedSlots,
     required this.isVerified,
   });
 
@@ -41,7 +39,6 @@ class Station {
       'stationImage': stationImage,
       'accessToken': accessToken,
       'noOfSlots': noOfSlots,
-      'reservedSlots': reservedSlots,
       'isVerified': isVerified,
     };
   }
@@ -58,7 +55,6 @@ class Station {
       stationImage: map['stationImage'] ?? '',
       accessToken: map['accessToken'] ?? '',
       noOfSlots: map['noOfSlots'] ?? '',
-      reservedSlots: map['reservedSlots'] ?? '',
       isVerified: map['isVerified'] ?? false,
     );
   }

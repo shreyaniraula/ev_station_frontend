@@ -39,14 +39,11 @@ class _UserBookingPageState extends State<UserBookingPage> {
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    print('************************************************');
-    print('Picked Time: $picked');
     if (picked != null) {
       // Format time as hh:mm and set it in the controller
       final formattedTime =
           '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
       controller.text = formattedTime;
-      print('Formatted Tiem: $formattedTime');
     }
   }
 
@@ -98,7 +95,7 @@ class _UserBookingPageState extends State<UserBookingPage> {
       stationId: widget.id,
       startingTime: startDateTime,
       endingTime: endDateTime,
-      paymentAmount: amount.toString(),
+      paymentAmount: amount,
       remarks: remarksController.text,
     );
   }
@@ -113,96 +110,112 @@ class _UserBookingPageState extends State<UserBookingPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    chargingStationController.dispose();
+    chargingStationLocationController.dispose();
+    startTimeController.dispose();
+    endTimeController.dispose();
+    remarksController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     chargingStationController.text = widget.name;
     chargingStationLocationController.text = widget.address;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Book Station'),
+        backgroundColor: const Color.fromARGB(255, 196, 231, 167),
+      ),
       body: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: const Color.fromARGB(255, 240, 242, 246),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomTextfield(
-                  labelText: 'Charging Station',
-                  obscureText: false,
-                  controller: chargingStationController,
-                  icon: Icons.business,
-                  readOnly: true,
-                ),
-                CustomTextfield(
-                  labelText: 'Charging Station Location',
-                  obscureText: false,
-                  controller: chargingStationLocationController,
-                  icon: Icons.location_on,
-                  readOnly: true,
-                ),
-                const SizedBox(height: 15),
-                GestureDetector(
-                  onTap: () => _selectTime(context, startTimeController),
-                  child: AbsorbPointer(
-                    child: CustomTextfield(
-                      labelText: 'Starting Time',
-                      obscureText: false,
-                      controller: startTimeController,
-                      icon: Icons.watch,
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 10),
+                  CustomTextfield(
+                    labelText: 'Charging Station',
+                    obscureText: false,
+                    controller: chargingStationController,
+                    icon: Icons.business,
+                    readOnly: true,
+                  ),
+                  CustomTextfield(
+                    labelText: 'Charging Station Location',
+                    obscureText: false,
+                    controller: chargingStationLocationController,
+                    icon: Icons.location_on,
+                    readOnly: true,
+                  ),
+                  GestureDetector(
+                    onTap: () => _selectTime(context, startTimeController),
+                    child: AbsorbPointer(
+                      child: CustomTextfield(
+                        labelText: 'Starting Time',
+                        obscureText: false,
+                        controller: startTimeController,
+                        icon: Icons.watch,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 15),
-                GestureDetector(
-                  onTap: () => _selectTime(context, endTimeController),
-                  child: AbsorbPointer(
-                    child: CustomTextfield(
-                      labelText: 'Ending Time',
-                      obscureText: false,
-                      controller: endTimeController,
-                      icon: Icons.watch,
+                  GestureDetector(
+                    onTap: () => _selectTime(context, endTimeController),
+                    child: AbsorbPointer(
+                      child: CustomTextfield(
+                        labelText: 'Ending Time',
+                        obscureText: false,
+                        controller: endTimeController,
+                        icon: Icons.lock_clock_sharp,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 15),
-                CustomTextfield(
-                  labelText: 'Remarks',
-                  obscureText: false,
-                  controller: remarksController,
-                  icon: Icons.note,
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Note: You would not get the refund of the payment and you are supposed to reach the charging station within 30 minutes of your booking. Otherwise, your booking might get cancelled.',
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.justify,
-                ),
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (validateTime()) {
-                        // makePayment();
-                        addReservation();
-                        startTimeController.clear();
-                        endTimeController.clear();
-                        remarksController.clear();
+                  CustomTextfield(
+                    labelText: 'Remarks',
+                    obscureText: false,
+                    controller: remarksController,
+                    icon: Icons.note,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Note: You would not get the refund of the payment and you are supposed to reach the charging station within 30 minutes of your booking. Otherwise, your booking might get cancelled.',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.justify,
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        if (validateTime()) {
+                          //TODO: Check makepayment
+                          makePayment();
+                          // addReservation();
+                          startTimeController.clear();
+                          endTimeController.clear();
+                          remarksController.clear();
+                        }
                       }
-                    }
-                  },
-                  style: elevatedButtonStyle,
-                  child: const Text(
-                    'Book Station',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
+                    },
+                    style: elevatedButtonStyle,
+                    child: const Text(
+                      'Book Station',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
         ),

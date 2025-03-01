@@ -4,7 +4,10 @@ class Reservation {
   final String id;
   final String reservedBy;
   final String reservedTo;
-  final String paymentAmount;
+  final String reserverName;
+  final String reservedStation;
+  final String location;
+  final int paymentAmount;
   final DateTime startingTime;
   final DateTime endingTime;
   final DateTime? date;
@@ -14,6 +17,9 @@ class Reservation {
     required this.id,
     required this.reservedBy,
     required this.reservedTo,
+    required this.reserverName,
+    required this.reservedStation,
+    required this.location,
     required this.paymentAmount,
     required this.startingTime,
     required this.endingTime,
@@ -26,6 +32,9 @@ class Reservation {
       'id': id,
       'reservedBy': reservedBy,
       'reservedTo': reservedTo,
+      'reserverName': reserverName,
+      'reservedStation': reservedStation,
+      'location': location,
       'paymentAmount': paymentAmount,
       'startingTime': startingTime,
       'endingTime': endingTime,
@@ -39,6 +48,9 @@ class Reservation {
       id: map['id'] ?? '',
       reservedBy: map['reservedBy'] ?? '',
       reservedTo: map['reservedTo'] ?? '',
+      reserverName: map['reserverName'] ?? '',
+      reservedStation: map['reservedStation'] ?? '',
+      location: map['location'] ?? '',
       paymentAmount: map['paymentAmount'] ?? '',
       startingTime: map['startingTime'] ?? '',
       endingTime: map['endingTime'] ?? '',

@@ -21,7 +21,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       appBar: AppBar(
         title: index == 0
             ? const Text('Nearby Stations')
-            : const Text('Book Station'),
+            : index == 1
+                ? const Text('Popular Stations')
+                : const Text('Personal Account'),
+                backgroundColor: const Color.fromARGB(255, 196, 231, 167),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,

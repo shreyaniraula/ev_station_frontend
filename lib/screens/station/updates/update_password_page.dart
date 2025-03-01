@@ -28,7 +28,7 @@ class UpdateStationPasswordPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Update Password'),
-        backgroundColor: const Color.fromARGB(255, 62, 182, 122),
+        backgroundColor: Color.fromARGB(248, 203, 243, 175),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),

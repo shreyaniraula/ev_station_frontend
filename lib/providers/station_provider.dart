@@ -12,7 +12,6 @@ class StationProvider extends ChangeNotifier {
     panCard: '',
     stationImage: '',
     noOfSlots: 0,
-    reservedSlots: 0,
     isVerified: false,
     accessToken: '',
   );

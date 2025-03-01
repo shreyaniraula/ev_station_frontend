@@ -105,7 +105,7 @@ class UserAuthService {
                 'user-auth-token', jsonDecode(res.body)['data']['accessToken']);
 
             if (context.mounted) {
-              Navigator.pushNamed(context, UserHomeScreen.routeName);
+              Navigator.pushNamedAndRemoveUntil(context, UserHomeScreen.routeName, (route)=>false);
             }
           },
         );

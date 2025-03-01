@@ -90,9 +90,20 @@ class _StationBookingPageState extends State<StationBookingPage> {
       context: context,
       startingTime: startDateTime,
       endingTime: endDateTime,
-      paymentAmount: paymentAmountController.text,
+      paymentAmount: int.parse(paymentAmountController.text),
       remarks: remarksController.text,
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    chargingStationController.dispose();
+    chargingStationLocationController.dispose();
+    startTimeController.dispose();
+    endTimeController.dispose();
+    paymentAmountController.dispose();
+    remarksController.dispose();
   }
 
   @override
@@ -155,6 +166,7 @@ class _StationBookingPageState extends State<StationBookingPage> {
                     obscureText: false,
                     controller: paymentAmountController,
                     icon: Icons.monetization_on_outlined,
+                    keyboardType: TextInputType.number,
                     readOnly: false,
                   ),
                   CustomTextfield(
@@ -176,9 +188,6 @@ class _StationBookingPageState extends State<StationBookingPage> {
                         if (validateTime()) {
                           // makePayment();
                           updateReservation();
-                          startTimeController.clear();
-                          endTimeController.clear();
-                          remarksController.clear();
                         }
                       }
                     },

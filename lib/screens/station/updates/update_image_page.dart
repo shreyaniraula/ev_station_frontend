@@ -42,7 +42,7 @@ class _UpdateStationImagePageState extends State<UpdateStationImagePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Update Image'),
-        backgroundColor: const Color.fromARGB(255, 62, 182, 122),
+        backgroundColor: Color.fromARGB(248, 203, 243, 175),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),

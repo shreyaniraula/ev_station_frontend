@@ -51,7 +51,6 @@ class StationAuthService {
         stationImage: stationImageUrl,
         accessToken: '',
         noOfSlots: noOfSlots,
-        reservedSlots: 0,
         isVerified: false,
       );
 
@@ -120,7 +119,7 @@ class StationAuthService {
                 jsonDecode(res.body)['data']['accessToken']);
 
             if (context.mounted) {
-              Navigator.pushNamed(context, StationHomeScreen.routeName);
+              Navigator.pushNamedAndRemoveUntil(context, StationHomeScreen.routeName, (route)=>false);
             }
           },
         );

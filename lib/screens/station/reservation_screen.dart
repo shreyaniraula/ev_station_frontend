@@ -1,6 +1,7 @@
 import 'package:ev_charge/models/reservation.model.dart';
 import 'package:ev_charge/services/reservation/reservation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReservationScreen extends StatefulWidget {
   static const String routeName = '/reservation-screen';
@@ -37,8 +38,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
       final now = DateTime.now();
       final futureBookings = bookings.where(
         (reservation) {
-          final startingTime = reservation.date;
-          return startingTime!.isAfter(now);
+          final startingTime = reservation.startingTime;
+          return startingTime.isAfter(now);
         },
       ).toList();
       if (mounted) {
@@ -60,115 +61,135 @@ class _ReservationScreenState extends State<ReservationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: _fetchReservations,
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _error != null
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Error: $_error',
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: _fetchReservations,
-                          child: const Text('Retry'),
-                        ),
-                      ],
-                    ),
-                  )
-                : _reservations.isEmpty
-                    ? const Center(
-                        child: Text('No upcoming reservations'),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: _reservations.length,
-                        itemBuilder: (context, index) {
-                          final reservation = _reservations[index];
-                          return Card(
-                            elevation: 2,
-                            margin: const EdgeInsets.only(bottom: 16),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Booking #${reservation.id}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 12),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.calendar_today,
-                                          size: 16, color: Colors.grey),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                         TimeOfDay.fromDateTime(reservation.startingTime).toString(),
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      const Icon(Icons.access_time,
-                                          size: 16, color: Colors.grey),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        TimeOfDay.fromDateTime(reservation.endingTime).toString(),
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.person,
-                                          size: 16, color: Colors.grey),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        reservation.reservedBy,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          // Navigate to booking details
-                                        },
-                                        child: const Text('View Details'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: _fetchReservations,
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _error != null
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Error: $_error',
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: _fetchReservations,
+                            child: const Text('Retry'),
+                          ),
+                        ],
                       ),
+                    )
+                  : _reservations.isEmpty
+                      ? const Center(
+                          child: Text('No upcoming reservations'),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: _reservations.length,
+                          itemBuilder: (context, index) {
+                            final reservation = _reservations[index];
+                            return Card(
+                              elevation: 2,
+                              color: Color.fromARGB(248, 203, 243, 175),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Booking #${reservation.id}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.calendar_today,
+                                            size: 16, color: Colors.grey),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(reservation.date!.toLocal()),
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        const Icon(Icons.access_time,
+                                            size: 16, color: Colors.grey),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          '${DateFormat('HH:mm').format(reservation.startingTime.toLocal())} - ${DateFormat('HH:mm').format(reservation.endingTime.toLocal())}',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.person,
+                                            size: 16, color: Colors.grey),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          reservation.reserverName,
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.monetization_on,
+                                            size: 16, color: Colors.grey),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          'Rs. ${reservation.paymentAmount/100}',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.note,
+                                            size: 16, color: Colors.grey),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          reservation.remarks,
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+        ),
       ),
     );
   }
